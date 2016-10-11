@@ -1,8 +1,8 @@
 <div class="container">
-    <div class="col-md-12 heading">
+    <!-- div class="col-md-12 heading">
         <h3 translate="WELCOME"></h3>
-    </div>
-    
+    </div -->
+
     <script type="text/ng-template" id="save-dialog.tmpl.html">
       <md-dialog>Sample Dialog</md-dialog>
     </script>
@@ -11,13 +11,13 @@
         <h3>Inventory</h3>
         <table class="table">
             <thead>
-                <tr><th ng-repeat="dt in dates">{{dt | date}}<br></th></tr>
+                <tr><th ng-repeat="dt in dates">{{dt.substring(5)}}<br></th></tr>
             </thead>
             <tbody ng-repeat="inv in invs">
                 <tr>
                     <td><button class="btn btn-primary" ng-click="showPromptAdd($event, $index)">Add</button></td>
                     <td><button class="btn btn-warning" ng-click="showPromptDeliver($event, $index)">Delv</button></td>
-                    <td>{{inv.bead}}</td><td>{{inv.qty0}}</td><td>{{inv.qty1}}</td><td>{{inv.qty2}}</td><td>{{inv.qty3}}</td><td>{{inv.qty4}}</td><td>{{inv.qty5}}</td><td>{{inv.qty6}}</td><td>{{inv.qty7}}</td><td>{{inv.qty8}}</td><td>{{inv.qty9}}</td><td>{{inv.qty10}}</td>
+                    <td>{{inv.bead}}</td><td>{{inv.total}}</td><td>{{inv.qty0}}</td><td>{{inv.qty1}}</td><td>{{inv.qty2}}</td><td>{{inv.qty3}}</td><td>{{inv.qty4}}</td><td>{{inv.qty5}}</td><td>{{inv.qty6}}</td><td>{{inv.qty7}}</td><td>{{inv.qty8}}</td><td>{{inv.qty9}}</td><td>{{inv.qty10}}</td>
                 </tr>
             </tbody>
         </table>

@@ -1,6 +1,6 @@
 myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$location', '$http', '$uibModal', '$log', '$mdDialog',
     function($q, $window, $scope, $route, $location, $http, $uibModal, $log, $mdDialog) {
-    $scope.adminEditState = true;    
+    $scope.adminEditState = true;
     $scope.invs = {};
     $scope.keys = {};
     $scope.addition = 0;
@@ -27,38 +27,41 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
             rawData = response.data;
             var byasof = _.countBy(rawData, function(data) { return data.asof; });
             var dates = _.keys(_.countBy(rawData, function(data) { return data.asof; }));
-            var beads2 =_.keys(_.countBy(rawData, function(data) { return data.bead_type; }));
-            var beads = _.uniq(_.map(rawData, function(d){return d.bead_type}));
+            //var beads2 =_.keys(_.countBy(rawData, function(data) { return data.bead_type; }));
+            var beads = _.uniq(_.map(rawData, function(data){return data.bead_type}));
             $scope.beads = beads;
 
             $scope.invs = [];
             for (var k = 0, len = beads.length; k < len; k++){
-                var inv = {}; 
+                var inv = {};
                 inv["bead"] = beads[k];
+                var total = 0;
                 for (var j = 0, len1 = dates.length; j < len1; j++){
                     for (var i = 0, len2 = rawData.length; i < len2; i++){
                         if (rawData[i].asof == dates[j] && rawData[i].bead_type == beads[k] ){
                             inv["qty" + j] = rawData[i].qty;
+                            total += rawData[i].qty;
                         }
                     }
                 }
+                inv["total"] = total;
                 $scope.invs.push(inv);
             }
-            dates.unshift("Beads");
-            dates.unshift("    ");
-            dates.unshift("      ");
+            dates.unshift("xxxxxTotal");
+            dates.unshift("xxxxxBeads");
+            dates.unshift("xxxxx    ");
+            dates.unshift("xxxxx      ");
             $scope.dates = dates;
 
         });
         return promise;
     }
 
-
     updateInventory = function(index, qty, party){
         var bead_type = $scope.invs[index].bead;
         var deferred = $q.defer();
         $scope.jobs = [];
-        
+
         $http.post('/dashboard',
             {bead_type: bead_type, qty: qty, party: party})
             .success(function (data, status) {
@@ -122,10 +125,10 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
             autoWrap: false,
             parent: angular.element(document.body),
             preserveScope: true,
-            locals: { 
-                qtys: $scope.qtys, 
+            locals: {
+                qtys: $scope.qtys,
                 selectedBead: $scope.invs[index].bead,
-                index: index 
+                index: index
             }
         });
 
@@ -134,7 +137,7 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
         }
     }
 
-    
+
     $scope.showPromptDeliver = function(ev, index) {
         function dialogController($scope, $mdDialog, hospitals, qtys, selectedBead, index) {
             $scope.hospitals = hospitals;
@@ -165,11 +168,11 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
             autoWrap: false,
             parent: angular.element(document.body),
             preserveScope: true,
-            locals: { 
-                hospitals: $scope.hospitals, 
-                qtys: $scope.qtys, 
+            locals: {
+                hospitals: $scope.hospitals,
+                qtys: $scope.qtys,
                 selectedBead: $scope.invs[index].bead,
-                index: index 
+                index: index
             }
         });
 
@@ -178,5 +181,3 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
         }
     }
 }]);
-
-

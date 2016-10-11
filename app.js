@@ -47,10 +47,10 @@ app.use('/beads', beads);
 // Serve back static files
 app.use(express.static('public'));
 app.use(express.static('public/views'));
-app.use(express.static('public/assets'));
-app.use(express.static('public/assets/scripts'));
-app.use(express.static('public/assets/styles'));
-app.use(express.static('public/vendors'));
+//app.use(express.static('public/assets'));
+//app.use(express.static('public/assets/scripts'));
+//app.use(express.static('public/assets/styles'));
+//app.use(express.static('public/vendors'));
 
 // App Set //
 app.set('port', (process.env.PORT || 5000));

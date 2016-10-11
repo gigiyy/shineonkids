@@ -1,8 +1,8 @@
-myApp.controller('hospitalsController', 
+myApp.controller('hospitalsController',
     ['$q', '$scope', '$route', '$location', '$http', '$log', '$mdDialog', '$window',
     function($q, $scope, $route, $location, $http, $log, $mdDialog, $window) {
-        $scope.adminEditState = true;    
-        $scope.hospitals = {};    
+        $scope.adminEditState = true;
+        $scope.hospitals = {};
         getData();
 
         function getData() {
@@ -12,11 +12,11 @@ myApp.controller('hospitalsController',
             return promise;
         }
 
-        updateHospital = function(name, address, phone){
+        updateHospital = function(name, postal, address, phone, dept, title, contact1, contact2, email){
             var deferred = $q.defer();
-            
+
             $http.put('/hospitals',
-                {name: name, address: address, phone: phone})
+                {name:name, postal:postal, address:address, phone:phone, dept:dept, title:title, contact1:contact1, contact2:contact2, email:email})
                 .success(function (data, status) {
                     if(status === 200 ){
                         deferred.resolve();
@@ -32,14 +32,20 @@ myApp.controller('hospitalsController',
         };
 
         $scope.editHospitals = function(ev, index) {
-            function dialogController($scope, $mdDialog, name, address, phone) {
+            function dialogController($scope, $mdDialog, name, postal, address, phone, dept, title, contact1, contact2, email) {
                 $scope.name = name;
+                $scope.postal = postal;
                 $scope.address = address;
                 $scope.phone = phone;
+                $scope.dept = dept;
+                $scope.title = title;
+                $scope.contact1 = contact1;
+                $scope.contact2 = contact2;
+                $scope.email = email;
                 $scope.index = index;
 
-                $scope.ok = function(address, phone) {
-                    updateHospital(name, address, phone);
+                $scope.ok = function(postal, address, phone, dept, title, contact1, contact2, email) {
+                    updateHospital(name, postal, address, phone, dept, title, contact1, contact2, email);
                     $mdDialog.hide();
                 }
 
@@ -60,11 +66,17 @@ myApp.controller('hospitalsController',
                 autoWrap: false,
                 parent: angular.element(document.body),
                 preserveScope: true,
-                locals: { 
-                    name: $scope.hospitals[index].name, 
+                locals: {
+                    name: $scope.hospitals[index].name,
+                    postal: $scope.hospitals[index].postal,
                     address: $scope.hospitals[index].address,
                     phone: $scope.hospitals[index].phone,
-                    index: index 
+                    dept: $scope.hospitals[index].dept,
+                    title: $scope.hospitals[index].title,
+                    contact1: $scope.hospitals[index].contact1,
+                    contact2: $scope.hospitals[index].contact2,
+                    email: $scope.hospitals[index].email,
+                    index: index
                 }
             });
 
@@ -72,5 +84,5 @@ myApp.controller('hospitalsController',
                // post-show code here: DOM element focus, etc.
             }
         }
-    }        
+    }
 ]);

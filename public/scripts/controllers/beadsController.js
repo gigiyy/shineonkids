@@ -1,8 +1,8 @@
-myApp.controller('beadsController', 
+myApp.controller('beadsController',
     ['$q', '$scope', '$route', '$location', '$http', '$log', '$mdDialog', '$window',
     function($q, $scope, $route, $location, $http, $log, $mdDialog, $window) {
-        $scope.adminEditState = true;    
-        $scope.beads = {};    
+        $scope.adminEditState = true;
+        $scope.beads = {};
         getData();
 
         function getData() {
@@ -12,11 +12,11 @@ myApp.controller('beadsController',
             return promise;
         }
 
-       updateBead = function(bead_type, lotsize, price){
+       updateBead = function(bead_type, lotsize, price, bead_type_jp, desc){
             var deferred = $q.defer();
-            
+
             $http.put('/beads',
-                {bead_type: bead_type, lotsize: lotsize, price: price})
+                {bead_type:bead_type, lotsize:lotsize, price:price, bead_type_jp:bead_type_jp, desc:desc})
                 .success(function (data, status) {
                     if(status === 200 ){
                         deferred.resolve();
@@ -32,14 +32,16 @@ myApp.controller('beadsController',
         };
 
         $scope.editBeads = function(ev, index) {
-            function dialogController($scope, $mdDialog, bead_type, lotsize, price) {
+            function dialogController($scope, $mdDialog, bead_type, lotsize, price, bead_type_jp, desc) {
                 $scope.bead_type = bead_type;
                 $scope.lotsize = lotsize;
                 $scope.price = price;
+                $scope.bead_type_jp = bead_type_jp;
+                $scope.desc = desc;
                 $scope.index = index;
 
-                $scope.ok = function(lotsize, price) {
-                    updateBead(bead_type, lotsize, price);
+                $scope.ok = function(lotsize, price, bead_type_jp, desc) {
+                    updateBead(bead_type, lotsize, price, bead_type_jp, desc);
                     $mdDialog.hide();
                 }
 
@@ -60,11 +62,13 @@ myApp.controller('beadsController',
                 autoWrap: false,
                 parent: angular.element(document.body),
                 preserveScope: true,
-                locals: { 
-                    bead_type: $scope.beads[index].bead_type, 
+                locals: {
+                    bead_type: $scope.beads[index].bead_type,
                     lotsize: $scope.beads[index].lotsize,
                     price: $scope.beads[index].price,
-                    index: index 
+                    bead_type_jp: $scope.beads[index].bead_type_jp,
+                    desc: $scope.beads[index].desc,
+                    index: index
                 }
             });
 
@@ -72,5 +76,5 @@ myApp.controller('beadsController',
                // post-show code here: DOM element focus, etc.
             }
         }
-    }     
+    }
 ]);

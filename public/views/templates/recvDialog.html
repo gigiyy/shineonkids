@@ -1,7 +1,7 @@
-<md-dialog aria-label="Receive from Supplier">
+<md-dialog layout-padding aria-label="Receive from Supplier">
   <h4>Add to Inventory: {{selectedBead}}</h4>
   <br>
-    <md-content layout="column" style="max-width:800px;max-height:810px;">
+    <md-content layout-padding layout="column" style="max-width:800px;max-height:810px;">
       <div id="mediumDiv">
 
         <aria-label>Select Qty: </aria-label>
@@ -11,8 +11,8 @@
       </div>
 
           <md-dialog-actions>
-            <md-button ng-click="cancel()">Cancel</md-button>
-            <md-button ng-click="ok(qty.id);">OK</md-button>
+            <md-button class="md-warn md-raised" ng-click="cancel()">Cancel</md-button>
+            <md-button class="md-primary md-raised" ng-click="ok(qty.id);">OK</md-button>
           </md-dialog-actions>
     </md-content>
 </md-dialog>

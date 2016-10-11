@@ -1,18 +1,19 @@
 <div class="container">
-    <div class="col-md-12 heading">
+    <!-- div class="col-md-12 heading">
         <h3 ></h3>
-    </div>
+    </div -->
 
     <div class="jumbotron">
         <h3>Beads</h3>
         <table class="table">
             <thead>
-                <tr><th></th><th>Bead Type</th><th>Lot size</th><th>Price</th></tr></tr>
+                <tr><th></th><th></th><th>Bead Type</th><th>Bead Type JP</th><th>Description</th><th>Lot Size</th><th>Price</th></tr></tr>
             </thead>
             <tbody ng-repeat="bead in beads">
                 <tr>
                     <td><button class="btn btn-primary" ng-click="editBeads($event, $index)">Edit</button></td>
-                    <td>{{bead.bead_type}}</td><td>{{bead.lotsize}}</td><td>{{bead.price}}</td>
+                    <td><img src="images/{{bead.bead_type}}.jpg" width="60px" height="60px"></td>
+                    <td>{{bead.bead_type}}</td><td>{{bead.bead_type_jp}}</td><td>{{bead.desc}}</td><td>{{bead.lotsize}}</td><td>{{bead.price}}</td>
                 </tr>
             </tbody>
         </table>

@@ -35,7 +35,6 @@ router.get('/details',  function(req, res) {
         if (err) callback (null);
         callback(rows);
     });
-
 });
 
 router.post('/',  function(req, res) {
@@ -47,7 +46,7 @@ router.post('/',  function(req, res) {
         qty: req.body.qty,
         party: req.body.party
     };
-    
+
     var asof = moment().format("YYYY/MM/DD");
     db.run(sql, [asof, newInventory.bead_type, newInventory.qty, newInventory.party], function(err, rows) {
             if(err) {
@@ -55,7 +54,7 @@ router.post('/',  function(req, res) {
                 return err;
             }
             return;
-    });    
+    });
 });
 
-module.exports = router;	
+module.exports = router;
