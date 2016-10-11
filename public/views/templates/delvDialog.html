@@ -1,0 +1,22 @@
+<md-dialog aria-label="Deliver">
+  <h4>Deliver to Hospitals: {{selectedBead}}</h4>
+  <br>
+    <md-content layout="column" style="max-width:800px;max-height:810px;">
+      <div id="mediumDiv">
+
+        <aria-label>Select Hospital: </aria-label>
+        <md-select ng-model="hospital" aria-label="Select Hospital:" >
+           <md-option ng-value="hospital" ng-repeat="hospital in hospitals">{{hospital.name}}</md-option>
+        </md-select>
+        <aria-label>Select Qty: </aria-label>
+           <md-select ng-model="qty" aria-label="Qty:" ng-model-options="{qtyId: '$qty.id'}">
+           <md-option ng-value="qty" ng-repeat="qty in qtys">{{qty.id}}</md-option>
+        </md-select>
+      </div>
+
+          <md-dialog-actions>
+            <md-button ng-click="cancel()">Cancel</md-button>
+            <md-button ng-click="ok(selectedBeads[0].bead, qty.id, hospital.name);">OK</md-button>
+          </md-dialog-actions>
+    </md-content>
+</md-dialog>

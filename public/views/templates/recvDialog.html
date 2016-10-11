@@ -1,0 +1,18 @@
+<md-dialog aria-label="Receive from Supplier">
+  <h4>Add to Inventory: {{selectedBead}}</h4>
+  <br>
+    <md-content layout="column" style="max-width:800px;max-height:810px;">
+      <div id="mediumDiv">
+
+        <aria-label>Select Qty: </aria-label>
+           <md-select ng-model="qty" aria-label="Qty:" ng-model-options="{qtyId: '$qty.id'}">
+           <md-option ng-value="qty" ng-repeat="qty in qtys">{{qty.id}}</md-option>
+        </md-select>
+      </div>
+
+          <md-dialog-actions>
+            <md-button ng-click="cancel()">Cancel</md-button>
+            <md-button ng-click="ok(qty.id);">OK</md-button>
+          </md-dialog-actions>
+    </md-content>
+</md-dialog>

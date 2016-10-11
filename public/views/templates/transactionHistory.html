@@ -1,0 +1,15 @@
+<div class="container">
+    
+    <div class="jumbotron">
+        <h3>Transaction History</h3>
+        <table class="table">
+            <thead>
+                <tr><th>Date</th><th>Bead Type</th><th>Qty</th><th>Party</th></tr>
+            </thead>
+            <tbody ng-repeat="inv in invs">
+                <tr>
+                    <td>{{inv.asof}}</td><td>{{inv.bead_type}}</td><td>{{inv.qty}}</td><td>{{inv.party}}</td>
+            </tbody>
+        </table>
+    </div>
+</div>
