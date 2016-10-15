@@ -7,7 +7,8 @@ var moment = require('moment');
 router.get('/summary',  function(req, res) {
     var results = [];
     var db = new sqlite3.Database(dbpath);
-    var sql = "SELECT asof, bead_type, sum(qty) qty FROM inventory group by asof, bead_type order by asof desc";
+    var sql = "SELECT i.asof, i.bead_type, b.lotsize, sum(i.qty) qty FROM inventory i, beads b "
+            + "WHERE i.bead_type = b.bead_type group by i.asof, i.bead_type, b.lotsize order by i.asof desc";
 
     function callback(rows) {
         results = rows;

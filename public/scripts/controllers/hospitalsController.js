@@ -31,6 +31,25 @@ myApp.controller('hospitalsController',
             return deferred.promise;
         };
 
+        insertHospital = function(name, postal, address, phone, dept, title, contact1, contact2, email){
+            var deferred = $q.defer();
+
+            $http.post('/hospitals',
+                {name:name, postal:postal, address:address, phone:phone, dept:dept, title:title, contact1:contact1, contact2:contact2, email:email})
+                .success(function (data, status) {
+                    if(status === 200 ){
+                        deferred.resolve();
+                    } else {
+                        deferred.reject();
+                    }
+                })
+                .error(function (data) {
+                    deferred.reject();
+                });
+                $window.location.reload();
+            return deferred.promise;
+        };
+
         $scope.editHospitals = function(ev, index) {
             function dialogController($scope, $mdDialog, name, postal, address, phone, dept, title, contact1, contact2, email) {
                 $scope.name = name;
@@ -76,6 +95,60 @@ myApp.controller('hospitalsController',
                     contact1: $scope.hospitals[index].contact1,
                     contact2: $scope.hospitals[index].contact2,
                     email: $scope.hospitals[index].email,
+                    index: index
+                }
+            });
+
+            function afterShowAnimation(scope, element, options) {
+               // post-show code here: DOM element focus, etc.
+            }
+        }
+
+        $scope.insertHospitals = function(ev, index) {
+            function dialogController($scope, $mdDialog, name, postal, address, phone, dept, title, contact1, contact2, email) {
+                $scope.name = name;
+                $scope.postal = postal;
+                $scope.address = address;
+                $scope.phone = phone;
+                $scope.dept = dept;
+                $scope.title = title;
+                $scope.contact1 = contact1;
+                $scope.contact2 = contact2;
+                $scope.email = email;
+                $scope.index = index;
+
+                $scope.ok = function(name, postal, address, phone, dept, title, contact1, contact2, email) {
+                    insertHospital(name, postal, address, phone, dept, title, contact1, contact2, email);
+                    $mdDialog.hide();
+                }
+
+                $scope.cancel = function() {
+                    $mdDialog.hide();
+                }
+            }
+
+            $mdDialog.show({
+                controller: dialogController,
+                targetEvent: ev,
+                ariaLabel:  'Edit Entry',
+                clickOutsideToClose: true,
+                templateUrl: 'views/templates/newHospital.html',
+                onComplete: afterShowAnimation,
+                size: 'large',
+                bindToController: true,
+                autoWrap: false,
+                parent: angular.element(document.body),
+                preserveScope: true,
+                locals: {
+                    name: "",
+                    postal: "",
+                    address: "",
+                    phone: "",
+                    dept: "",
+                    title: "",
+                    contact1: "",
+                    contact2: "",
+                    email: "",
                     index: index
                 }
             });

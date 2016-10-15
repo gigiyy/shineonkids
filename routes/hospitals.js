@@ -43,6 +43,32 @@ router.put('/',  function(req, res) {
             }
             return;
     });
-
 });
+
+
+router.post('/',  function(req, res) {
+    var results = [];
+    var db = new sqlite3.Database(dbpath);
+    var sql = "INSERT INTO hospitals VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    var newHospital = {
+        name: req.body.name,
+        postal: req.body.postal,
+        address: req.body.address,
+        phone: req.body.phone,
+        dept: req.body.dept,
+        title: req.body.title,
+        contact1: req.body.contact1,
+        contact2: req.body.contact2,
+        email: req.body.email
+    };
+    db.run(sql, [newHospital.name, newHospital.postal, newHospital.adress, newHospital.phone, newHospital.dept, newHospital.title, newHospital.contact1, newHospital.contact2, newHospital.email], function(err, rows) {
+            if(err) {
+                console.log(err);
+                return err;
+            }
+            return;
+    });
+});
+
 module.exports = router;

@@ -41,4 +41,27 @@ router.put('/',  function(req, res) {
     });
 
 });
+
+router.post('/',  function(req, res) {
+    var results = [];
+    var db = new sqlite3.Database(dbpath);
+    var sql = "INSERT INTO beads VALUES (?, ?, ?, ?, ?)";
+
+    var newBead = {
+        bead_type: req.body.bead_type,
+        lotsize: req.body.lotsize,
+        price: req.body.price,
+        bead_type_jp: req.body.bead_type_jp,
+        desc: req.body.desc
+    };
+
+    db.run(sql, [newBead.bead_type, newBead.lotsize, newBead.price, newBead.bead_type_jp, newBead.desc], function(err, rows) {
+            if(err) {
+                console.log(err);
+                return err;
+            }
+            return;
+    });
+});
+
 module.exports = router;

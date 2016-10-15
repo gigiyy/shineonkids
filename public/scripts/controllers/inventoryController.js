@@ -7,7 +7,7 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
     $scope.hospitals = {};
     //$scope.selectedBeads = {};
 
-    $scope.qtys = [{'id': 1}, {'id':2},{'id':3},{'id':4},{'id':5},{'id':6},{'id':7},{'id':8},{'id':9},{'id':10},{'id':12},{'id':15},{'id':18},{'id':20},{'id':25}];
+    //$scope.qtys = [{'id': 1}, {'id':2},{'id':3},{'id':4},{'id':5},{'id':6},{'id':7},{'id':8},{'id':9},{'id':10},{'id':12},{'id':15},{'id':18},{'id':20},{'id':25}];
 
     getHospitals();
     var rawData = null;
@@ -28,17 +28,18 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
             var byasof = _.countBy(rawData, function(data) { return data.asof; });
             var dates = _.keys(_.countBy(rawData, function(data) { return data.asof; }));
             //var beads2 =_.keys(_.countBy(rawData, function(data) { return data.bead_type; }));
-            var beads = _.uniq(_.map(rawData, function(data){return data.bead_type}));
+            var beads = _.uniq(_.map(rawData, function(data){ return {bead_type:data.bead_type, lotsize:data.lotsize}; }));
             $scope.beads = beads;
 
             $scope.invs = [];
             for (var k = 0, len = beads.length; k < len; k++){
                 var inv = {};
-                inv["bead"] = beads[k];
+                inv["bead"] = beads[k].bead_type;
+                inv["lotsize"] = beads[k].lotsize;
                 var total = 0;
                 for (var j = 0, len1 = dates.length; j < len1; j++){
                     for (var i = 0, len2 = rawData.length; i < len2; i++){
-                        if (rawData[i].asof == dates[j] && rawData[i].bead_type == beads[k] ){
+                        if (rawData[i].asof == dates[j] && rawData[i].bead_type == beads[k].bead_type ){
                             inv["qty" + j] = rawData[i].qty;
                             total += rawData[i].qty;
                         }
@@ -78,29 +79,12 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
         return deferred.promise;
     };
 
-    // not in use anymore
-    $scope.showPromptAdd2 = function(ev, index) {
-        var confirm = $mdDialog.prompt()
-        .title('Add to Inventory')
-        .textContent('Enter Supplied Quantity')
-        .placeholder('1')
-        .ariaLabel('1')
-        .initialValue('1')
-        .targetEvent(ev)
-        .ok('OK')
-        .cancel('Cancel');
-
-        $mdDialog.show(confirm).then(function(result) {
-            updateInventory(index,  result, "Supplier");
-        }, function() {
-            // nothing to be done
-        });
-    }
 
     $scope.showPromptAdd = function(ev, index) {
-        function dialogController($scope, $mdDialog, index, qtys, selectedBead) {
+        function dialogController($scope, $mdDialog, index, qtys, selectedBead, lotsize) {
             $scope.qtys = qtys;
             $scope.selectedBead = selectedBead;
+            $scope.lotsize = lotsize;
             $scope.index = index;
 
             $scope.ok = function(qty) {
@@ -128,6 +112,7 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
             locals: {
                 qtys: $scope.qtys,
                 selectedBead: $scope.invs[index].bead,
+                lotsize: $scope.invs[index].lotsize,
                 index: index
             }
         });
@@ -139,16 +124,31 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
 
 
     $scope.showPromptDeliver = function(ev, index) {
-        function dialogController($scope, $mdDialog, hospitals, qtys, selectedBead, index) {
+        var aqty = $scope.invs[index].total;
+        var abead = $scope.invs[index].bead;
+
+        function dialogController($scope, $mdDialog, hospitals, qtys, selectedBead, lotsize, index) {
             $scope.hospitals = hospitals;
             $scope.qtys = qtys;
             $scope.selectedBead = selectedBead;
+            $scope.lotsize = lotsize;
             $scope.index = index;
 
-            $scope.ok = function(bead, qty, hospital) {
-                qty = -1* qty;
-                updateInventory(index, qty, hospital);
-                $mdDialog.hide();
+            $scope.ok = function(qty, hospital) {
+                if (qty > aqty ) {
+                    if (confirm( abead + ' is low on inventory, enter a Back Order?')) {
+                        qty = -1* qty;
+                        var party = '[Back Order]' + hospital;
+                        updateInventory(index, qty, party);
+                        $mdDialog.hide();
+                    } else {
+                        $mdDialog.hide();
+                    }
+                } else {
+                    qty = -1* qty;
+                    updateInventory(index, qty, hospital);
+                    $mdDialog.hide();
+                }
             }
 
             $scope.cancel = function() {
@@ -172,6 +172,7 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
                 hospitals: $scope.hospitals,
                 qtys: $scope.qtys,
                 selectedBead: $scope.invs[index].bead,
+                lotsize: $scope.invs[index].lotsize,
                 index: index
             }
         });
