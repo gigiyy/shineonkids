@@ -24,7 +24,7 @@ router.get('/summary',  function(req, res) {
 router.get('/details',  function(req, res) {
     var results = [];
     var db = new sqlite3.Database(dbpath);
-    var sql = "SELECT asof, bead_type, qty, party FROM inventory order by asof desc, bead_type asc";
+    var sql = "SELECT asof, bead_type, qty, party FROM inventory order by timestamp desc, asof desc, bead_type asc";
 
     function callback(rows) {
         results = rows;
@@ -40,7 +40,7 @@ router.get('/details',  function(req, res) {
 router.post('/',  function(req, res) {
     var results = [];
     var db = new sqlite3.Database(dbpath);
-    var sql = "INSERT INTO inventory VALUES (?, ?, ?, ?)";
+    var sql = "INSERT INTO inventory (asof, bead_type, qty, party) VALUES (?, ?, ?, ?)";
     var newInventory = {
         bead_type: req.body.bead_type,
         qty: req.body.qty,
