@@ -1,0 +1,18 @@
+<md-dialog layout-padding aria-label="Order to Supplier">
+  <h4>Order to Supplier: {{selectedBead}}</h4>
+  <br>
+    <md-content layout-padding layout="column" style="max-width:800px;max-height:810px;">
+      <div id="mediumDiv">
+
+        <aria-label>Qty (Lotsize: {{lotsize}}): </aria-label>
+        <div class="form-group">
+          <input class="form-control" type="number" ng-model="qty" ng-bind="qty" placeholder="by bag (integer and/or fraction)">
+        </div>
+      </div>
+
+      <md-dialog-actions>
+        <md-button class="md-warn md-raised" ng-click="cancel()">Cancel</md-button>
+        <md-button class="md-primary md-raised" ng-click="ok(qty * lotsize);">OK</md-button>
+      </md-dialog-actions>
+    </md-content>
+</md-dialog>

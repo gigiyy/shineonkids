@@ -11,13 +11,24 @@
         <h3>Inventory</h3>
         <table class="table">
             <thead>
-                <tr><th ng-repeat="dt in dates">{{dt.substring(5)}}<br></th></tr>
+                <tr><th ng-repeat="dt in dates">{{dt.substring(5,10)}}<br>{{dt.substring(10)}}<br></th></tr>
             </thead>
             <tbody ng-repeat="inv in invs">
                 <tr>
-                    <td><button class="btn btn-primary" ng-click="showPromptAdd($event, $index)">Add</button></td>
-                    <td><button class="btn btn-warning" ng-click="showPromptDeliver($event, $index)">Delv</button></td>
-                    <td>{{inv.bead}}</td><td>{{inv.total}}</td><td>{{inv.qty0}}</td><td>{{inv.qty1}}</td><td>{{inv.qty2}}</td><td>{{inv.qty3}}</td><td>{{inv.qty4}}</td><td>{{inv.qty5}}</td><td>{{inv.qty6}}</td><td>{{inv.qty7}}</td><td>{{inv.qty8}}</td><td>{{inv.qty9}}</td><td>{{inv.qty10}}</td>
+                    <td><button class="btn btn-danger btn-sm" ng-click="showPromptOrder($event, $index)">Order</button></td>
+                    <td><button class="btn btn-primary btn-sm" ng-click="showPromptAdd($event, $index)">Add</button></td>
+                    <td><button class="btn btn-warning btn-sm" ng-click="showPromptDeliver($event, $index)">Delv</button></td>
+                    <td>{{inv.bead}}</td><td>{{inv.total}}<br>{{inv.backorder_total}}</td>
+                    <td>{{inv.qty0}}<br>{{inv.backorder_qty0}}</td>
+                    <td>{{inv.qty1}}<br>{{inv.backorder_qty1}}</td>
+                    <td>{{inv.qty2}}<br>{{inv.backorder_qty2}}</td>
+                    <td>{{inv.qty3}}<br>{{inv.backorder_qty3}}</td>
+                    <td>{{inv.qty4}}<br>{{inv.backorder_qty4}}</td>
+                    <td>{{inv.qty5}}<br>{{inv.backorder_qty5}}</td>
+                    <td>{{inv.qty6}}<br>{{inv.backorder_qty6}}</td>
+                    <td>{{inv.qty7}}<br>{{inv.backorder_qty7}}</td>
+                    <td>{{inv.qty8}}<br>{{inv.backorder_qty8}}</td>
+                    <td>{{inv.qty9}}<br>{{inv.backorder_qty9}}</td>
                 </tr>
             </tbody>
         </table>

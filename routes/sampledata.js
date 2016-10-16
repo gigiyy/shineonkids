@@ -77,7 +77,7 @@ var initialize = function (err, done) {
 
 			db.run("CREATE TABLE if not exists inventory (asof DATE, bead_type TEXT, qty INTEGER, party TEXT, timestamp TIMESTAMP DEFAULT (DATETIME('now', 'localtime')))");
 			var stmt = db.prepare("INSERT INTO inventory (asof, bead_type, qty, party) VALUES (?, ?, ?, ?)");
-			var asof = moment();
+			var asof = moment().add(-1, 'days');
 			//db.each("SELECT bead_type FROM beads", function(err, row) {
 			//	stmt.run(asof.format("YYYY/MM/DD"), row.bead_type, 0, 'Initialize');
 			//});
