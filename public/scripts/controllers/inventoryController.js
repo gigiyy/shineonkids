@@ -132,6 +132,9 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
 
 
     $scope.showPromptAdd = function(ev, index) {
+        var abackorder_qty = ($scope.invs[index].backorder_total == null) ? 0 : $scope.invs[index].backorder_total.replace(/\(/g,"").replace(/\)/g,"");
+        var abead = $scope.invs[index].bead;
+
         function dialogController($scope, $mdDialog, index, qtys, selectedBead, lotsize) {
             $scope.qtys = qtys;
             $scope.selectedBead = selectedBead;
@@ -139,8 +142,13 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
             $scope.index = index;
 
             $scope.ok = function(qty) {
-                updateInventory(index, qty, "Receive");
-                $mdDialog.hide();
+                if (qty > abackorder_qty) {
+                  alert('Add quantity should be <= Back order quantity');
+                  $mdDialog.hide();
+                } else {
+                  updateInventory(index, qty, "Receive");
+                  $mdDialog.hide();
+                }
             }
 
             $scope.cancel = function() {
