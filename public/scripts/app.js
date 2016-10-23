@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp', 
+var myApp = angular.module('myApp',
   ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'ngTagsInput' , 'ngMaterial']);
 
 
@@ -20,6 +20,10 @@ myApp.config(['$routeProvider', function($routeProvider) {
         .when('/transaction_histrory', {
             templateUrl: '/views/templates/transactionHistory.html',
             controller: 'transactionHistoryController'
+        })
+        .when('/order_histrory', {
+            templateUrl: '/views/templates/orderHistory.html',
+            controller: 'orderHistoryController'
         })
         .when('/notImplemented', {
             templateUrl: '/views/templates/notImplemented.html'

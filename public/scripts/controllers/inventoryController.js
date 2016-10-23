@@ -27,20 +27,20 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
             rawData = response.data;
             var byasof = _.countBy(rawData, function(data) { return data.asof; });
             var dates = _.keys(_.countBy(rawData, function(data) { return data.asof; }));
-            //var beads2 =_.keys(_.countBy(rawData, function(data) { return data.bead_type; }));
-            var beads = _.uniq(_.map(rawData, function(data){ return {'bead_type':data.bead_type, 'lotsize':data.lotsize}; }), 'bead_type');
+            //var beads2 =_.keys(_.countBy(rawData, function(data) { return data.name; }));
+            var beads = _.uniq(_.map(rawData, function(data){ return {'name':data.name, 'lotsize':data.lotsize}; }), 'name');
             //$scope.beads = beads;
 
             $scope.invs = [];
             for (var k = 0, len = beads.length; k < len; k++){
                 var inv = {};
-                inv["bead"] = beads[k].bead_type;
+                inv["bead"] = beads[k].name;
                 inv["lotsize"] = beads[k].lotsize;
                 var total = 0;
                 var backorder_total = 0;
                 for (var j = 0, len1 = dates.length; j < len1; j++){
                     for (var i = 0, len2 = rawData.length; i < len2; i++){
-                        if (rawData[i].asof == dates[j] && rawData[i].bead_type == beads[k].bead_type){
+                        if (rawData[i].asof == dates[j] && rawData[i].name == beads[k].name){
                             inv["qty" + j] = rawData[i].qty;
                             if (rawData[i].backorder_qty != 0) {
                               inv["backorder_qty" + j] = '(' + rawData[i].backorder_qty + ')';
@@ -68,12 +68,12 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
     }
 
     updateInventory = function(index, qty, party){
-        var bead_type = $scope.invs[index].bead;
+        var name = $scope.invs[index].bead;
         var deferred = $q.defer();
         $scope.jobs = [];
 
         $http.post('/dashboard',
-            {bead_type: bead_type, qty: qty, party: party})
+            {name: name, qty: qty, party: party})
             .success(function (data, status) {
                 if(status === 200 ){
                     deferred.resolve();

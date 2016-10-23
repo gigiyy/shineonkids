@@ -1,0 +1,16 @@
+<div class="container">
+
+    <div class="jumbotron">
+        <h3>Order History</h3>
+        <table class="table">
+            <thead>
+                <tr><th>Date</th><th>Party</th><th ng-repeat="bead in beads">{{bead.name}}</th></tr>
+            </thead>
+            <tbody ng-repeat="order in orders">
+                <tr>
+                    <td>{{order.date}}</td><td>{{order.party}}</td><td ng-repeat="bead in beads">{{order[bead.name]}}</td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
