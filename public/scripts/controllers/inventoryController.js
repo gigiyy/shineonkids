@@ -5,15 +5,34 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
     $scope.keys = {};
     $scope.addition = 0;
     $scope.hospitals = {};
-    //$scope.selectedBeads = {};
 
-    //$scope.qtys = [{'id': 1}, {'id':2},{'id':3},{'id':4},{'id':5},{'id':6},{'id':7},{'id':8},{'id':9},{'id':10},{'id':12},{'id':15},{'id':18},{'id':20},{'id':25}];
-
+    loginCheck();
     getHospitals();
     var rawData = null;
 
     getData();
 
+    function loginCheck() {
+        $http.get('/login').then(function(response) {
+          var user = response.data;
+          if (user == '') {
+            showPromptLogin();
+          }
+        });
+    }
+
+    function showPromptLogin() {
+        $mdDialog.show({
+            ariaLabel:  'Login',
+            clickOutsideToClose: true,
+            templateUrl: 'views/templates/loginDialog.html',
+            size: 'large',
+            bindToController: true,
+            autoWrap: false,
+            parent: angular.element(document.body),
+            preserveScope: true,
+        });
+    }
 
     function getHospitals() {
         var promise = $http.get('/hospitals').then(function(response) {
@@ -27,9 +46,7 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
             rawData = response.data;
             var byasof = _.countBy(rawData, function(data) { return data.asof; });
             var dates = _.keys(_.countBy(rawData, function(data) { return data.asof; }));
-            //var beads2 =_.keys(_.countBy(rawData, function(data) { return data.name; }));
             var beads = _.uniq(_.map(rawData, function(data){ return {'name':data.name, 'lotsize':data.lotsize}; }), 'name');
-            //$scope.beads = beads;
 
             $scope.invs = [];
             for (var k = 0, len = beads.length; k < len; k++){
@@ -89,8 +106,7 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
     };
 
     $scope.showPromptOrder = function(ev, index) {
-        function dialogController($scope, $mdDialog, index, qtys, selectedBead, lotsize) {
-            $scope.qtys = qtys;
+        function dialogController($scope, $mdDialog, index, selectedBead, lotsize) {
             $scope.selectedBead = selectedBead;
             $scope.lotsize = lotsize;
             $scope.index = index;
@@ -118,7 +134,6 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
             parent: angular.element(document.body),
             preserveScope: true,
             locals: {
-                qtys: $scope.qtys,
                 selectedBead: $scope.invs[index].bead,
                 lotsize: $scope.invs[index].lotsize,
                 index: index
@@ -135,8 +150,7 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
         var abackorder_qty = ($scope.invs[index].backorder_total == null) ? 0 : $scope.invs[index].backorder_total.replace(/\(/g,"").replace(/\)/g,"");
         var abead = $scope.invs[index].bead;
 
-        function dialogController($scope, $mdDialog, index, qtys, selectedBead, lotsize) {
-            $scope.qtys = qtys;
+        function dialogController($scope, $mdDialog, index, selectedBead, lotsize) {
             $scope.selectedBead = selectedBead;
             $scope.lotsize = lotsize;
             $scope.index = index;
@@ -169,7 +183,6 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
             parent: angular.element(document.body),
             preserveScope: true,
             locals: {
-                qtys: $scope.qtys,
                 selectedBead: $scope.invs[index].bead,
                 lotsize: $scope.invs[index].lotsize,
                 index: index
@@ -186,9 +199,8 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
         var aqty = $scope.invs[index].total;
         var abead = $scope.invs[index].bead;
 
-        function dialogController($scope, $mdDialog, hospitals, qtys, selectedBead, lotsize, index) {
+        function dialogController($scope, $mdDialog, hospitals, selectedBead, lotsize, index) {
             $scope.hospitals = hospitals;
-            $scope.qtys = qtys;
             $scope.selectedBead = selectedBead;
             $scope.lotsize = lotsize;
             $scope.index = index;
@@ -237,7 +249,6 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
             preserveScope: true,
             locals: {
                 hospitals: $scope.hospitals,
-                qtys: $scope.qtys,
                 selectedBead: $scope.invs[index].bead,
                 lotsize: $scope.invs[index].lotsize,
                 index: index

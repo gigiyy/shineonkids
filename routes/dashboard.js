@@ -4,7 +4,7 @@ var dbpath = "data/dbfile.db";
 var sqlite3 = require('sqlite3');
 var moment = require('moment');
 
-router.get('/summary',  function(req, res) {
+router.get('/summary', function(req, res) {
     var results = [];
     var db = new sqlite3.Database(dbpath);
     var sql = "SELECT i.asof, i.name, b.lotsize, sum(case when i.party = 'Order' then 0 else i.qty end) qty, "

@@ -4,7 +4,31 @@ myApp.controller('beadsController',
         $scope.adminEditState = true;
         $scope.beads = {};
         $scope.types = {};
+
+        loginCheck()
         getData();
+
+        function loginCheck() {
+            $http.get('/login').then(function(response) {
+              var user = response.data;
+              if (user == '') {
+                showPromptLogin();
+              }
+            });
+        }
+
+        function showPromptLogin() {
+            $mdDialog.show({
+                ariaLabel:  'Login',
+                clickOutsideToClose: true,
+                templateUrl: 'views/templates/loginDialog.html',
+                size: 'large',
+                bindToController: true,
+                autoWrap: false,
+                parent: angular.element(document.body),
+                preserveScope: true,
+            });
+        }
 
         function getData() {
             var promise = $http.get('/beads').then(function(response) {

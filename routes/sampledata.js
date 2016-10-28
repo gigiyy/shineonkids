@@ -47,10 +47,6 @@ var initialize = function (err, done) {
 			stmt.run('九州がんセンター','811-1395','福岡市南区野多目3-1-1','',
 							 'サイコオンコロジー科','臨床心理士','白石　恵子','前原　葉子','');
 
-			//stmt.run('Tokyo', '1-1-2 Nakano', '9128912891');
-			//stmt.run('Nagoya', '1-2-2 Kori machi', '2676876872');
-			//stmt.run('Yokohama', '1-1-2 Naka Ku', '2827892789');
-			//stmt.run('Shizuoka', '1-1-2 Shizuoka', '98798789');
 			stmt.finalize();
 
  			var beads = [
@@ -75,8 +71,7 @@ var initialize = function (err, done) {
 				stmt.run(name, 100, price);
 			}
 			*/
-			//stmt.run('Beige Bead', 500, 18, 'ベージュ', '骨髄穿刺・骨髄生検・関節穿刺')
-			//stmt.run('White Bead', 500, 18, '白', '化学療法・予防接種')
+
 			for (var i = 0, len = beads.length; i < len; i++){
 				stmt.run(beads[i].name, beads[i].type, beads[i].lotsize, beads[i].price, beads[i].name_jp, beads[i].desc)
 			}
@@ -85,11 +80,13 @@ var initialize = function (err, done) {
 			db.run("CREATE TABLE if not exists inventory (asof DATE, name TEXT, qty INTEGER, party TEXT, timestamp TIMESTAMP DEFAULT (DATETIME('now', 'localtime')))");
 			var stmt = db.prepare("INSERT INTO inventory (asof, name, qty, party) VALUES (?, ?, ?, ?)");
 			var asof = moment().add(-1, 'days');
-			//db.each("SELECT name FROM beads", function(err, row) {
-			//	stmt.run(asof.format("YYYY/MM/DD"), row.name, 0, 'Initialize');
-			//});
-			//stmt.run(asof.format("YYYY/MM/DD"), 'Beige Bead', 0, 'Initialize')
-			//stmt.run(asof.format("YYYY/MM/DD"), 'White Bead', 0, 'Initialize')
+
+			/*
+			db.each("SELECT name FROM beads", function(err, row) {
+				stmt.run(asof.format("YYYY/MM/DD"), row.name, 0, 'Initialize');
+			});
+			*/
+
 			for (var i = 0, len = beads.length; i < len; i++){
 				stmt.run(asof.format("YYYY/MM/DD"), beads[i].name, beads[i].qty, 'Initialize')
 			}
