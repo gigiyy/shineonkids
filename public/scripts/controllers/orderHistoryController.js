@@ -7,7 +7,7 @@ myApp.controller('orderHistoryController', ['$q', '$window', '$scope', '$route',
   var rawData = null;
 
   loginCheck();
-  getBeads();
+  //getBeads();
   getOrders();
 
   function loginCheck() {
@@ -40,8 +40,11 @@ myApp.controller('orderHistoryController', ['$q', '$window', '$scope', '$route',
   }
 
   function getOrders() {
-    var promise = $http.get('/dashboard/details ').then(function(response) {
+    getBeads()
+
+    var promise = $http.get('/dashboard/details').then(function(response) {
       rawData = response.data;
+
       var beads = $scope.beads;
       var datesParties = _.uniq(_.map(rawData, function(data){ return {'asof':data.asof, 'party':data.party}; }), ('asof', 'party'));
 

@@ -3,6 +3,7 @@ myApp.controller('beadsController',
     function($q, $scope, $route, $location, $http, $log, $mdDialog, $window) {
         $scope.adminEditState = true;
         $scope.beads = {};
+        $scope.names = {};
         $scope.types = {};
 
         loginCheck()
@@ -33,6 +34,7 @@ myApp.controller('beadsController',
         function getData() {
             var promise = $http.get('/beads').then(function(response) {
                 $scope.beads = response.data;
+                $scope.names = _.keys(_.countBy($scope.beads, function(data) { return data.name; }));
                 $scope.types = _.keys(_.countBy($scope.beads, function(data) { return data.type; }));
             });
             return promise;
@@ -88,8 +90,13 @@ myApp.controller('beadsController',
                 $scope.index = index;
 
                 $scope.ok = function(type, lotsize, price, name_jp, desc) {
+                  if (!type) {
+                    alert('Bead Type should not be blank');
+                  }
+                  else {
                     updateBead(name, type, lotsize, price, name_jp, desc);
                     $mdDialog.hide();
+                  }
                 }
 
                 $scope.cancel = function() {
@@ -127,7 +134,8 @@ myApp.controller('beadsController',
         }
 
         $scope.newBead = function(ev, index) {
-            function dialogController($scope, $mdDialog, types, name, type, lotsize, price, name_jp, desc) {
+            function dialogController($scope, $mdDialog, names, types, name, type, lotsize, price, name_jp, desc) {
+                $scope.names = names;
                 $scope.types = types;
                 $scope.name = name;
                 $scope.type = type;
@@ -138,8 +146,19 @@ myApp.controller('beadsController',
                 $scope.index = index;
 
                 $scope.ok = function(name, type, lotsize, price, name_jp, desc) {
+                  if (!name) {
+                    alert('Bead Name should not be blank');
+                  }
+                  else if (names.indexOf(name) > 0) {
+                    alert('Bead Name already exists');
+                  }
+                  else if (!type) {
+                    alert('Bead Type should not be blank');
+                  }
+                  else {
                     insertBead(name, type, lotsize, price, name_jp, desc);
                     $mdDialog.hide();
+                  }
                 }
 
                 $scope.cancel = function() {
@@ -160,6 +179,7 @@ myApp.controller('beadsController',
                 parent: angular.element(document.body),
                 preserveScope: true,
                 locals: {
+                    names: $scope.names,
                     types: $scope.types,
                     name: "",
                     type: "",

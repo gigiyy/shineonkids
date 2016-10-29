@@ -22,8 +22,6 @@ try{
 
 var bodyParser = require('body-parser');
 var session = require('express-session');
-//var passport = require('passport');
-//app.use(passport.initialize());
 
 // Route includes
 var dashboard = require('./routes/dashboard');
@@ -47,10 +45,10 @@ app.use(session({
 
 var sessionCheck = function(req, res, next) {
   if (req.session.user) {
-    console.log("Login User: " + req.session.user);
+    //console.log("Login User: " + req.session.user);
     next();
   } else {
-    console.log("Login User: " + req.session.user);
+    //console.log("Login User: " + req.session.user);
   }
 };
 

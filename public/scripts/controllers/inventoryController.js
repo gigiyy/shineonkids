@@ -73,11 +73,11 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
                 }
                 $scope.invs.push(inv);
             }
-            dates.unshift("xxxxxTotal(Order)");
-            dates.unshift("xxxxxBeads");
-            dates.unshift("xxxxx     ");
-            dates.unshift("xxxxx      ");
-            dates.unshift("xxxxx    ");
+            //dates.unshift("xxxxxTotal(Order)");
+            //dates.unshift("xxxxxBeads");
+            //dates.unshift("xxxxx     ");
+            //dates.unshift("xxxxx      ");
+            //dates.unshift("xxxxx    ");
             $scope.dates = dates;
 
         });
@@ -158,7 +158,6 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
             $scope.ok = function(qty) {
                 if (qty > abackorder_qty) {
                   alert('Add quantity should be <= Back order quantity');
-                  $mdDialog.hide();
                 } else {
                   updateInventory(index, qty, "Receive");
                   $mdDialog.hide();
@@ -206,13 +205,11 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
             $scope.index = index;
 
             $scope.ok = function(qty, hospital) {
-                if (hospital == null) {
+                if (!hospital) {
                   alert('Hospital should not be blank');
-                  $mdDialog.hide();
                 }
                 else if (! qty > 0) {
                   alert('Quantity should be > 0');
-                  $mdDialog.hide();
                 }
                 else if (qty > aqty ) {
                     if (confirm(abead + ' is low on inventory, enter a Back Order?')) {
@@ -220,10 +217,12 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
                         var party = '[Back Order]' + hospital;
                         updateInventory(index, qty, party);
                         $mdDialog.hide();
-                    } else {
+                    }
+                    else {
                         $mdDialog.hide();
                     }
-                } else {
+                }
+                else {
                     qty = -1* qty;
                     updateInventory(index, qty, hospital);
                     $mdDialog.hide();

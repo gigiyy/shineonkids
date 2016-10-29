@@ -1,25 +1,39 @@
-<div class="container">
-    <!-- div class="col-md-12 heading">
-        <h3 ></h3>
-    </div -->
+<div class="container-fluid">
 
     <div class="jumbotron">
+      <div class="alt-table-responsive">
         <h3>Hospitals</h3>
-        <table class="table">
+        <table class="table table-hover">
             <thead>
                 <tr>
-                  <th></th><th>Name</th><th>Postal</th><th>Address</th><th>Phone</th><th>Department</th><th>Title</th>
-                  <th>Contact1</th><th>Contact2</th><th>Email</th>
+                  <th class="col-md-1 col-sm-1 hidden-xs"></th>
+                  <th class="col-md-2 col-sm-2 col-xs-2">Name</th>
+                  <th class="col-md-1 col-sm-1 col-xs-1">Postal</th>
+                  <th class="col-md-2 col-sm-2 col-xs-2">Address</th>
+                  <th class="col-md-1 col-sm-1 col-xs-1">Phone</th>
+                  <th class="col-md-1 col-sm-1 hidden-xs">Department</th>
+                  <th class="col-md-1 hidden-sm hidden-xs">Title</th>
+                  <th class="col-md-1 hidden-sm hidden-xs">Contact1</th>
+                  <th class="col-md-1 hidden-sm hidden-xs">Contact2</th>
+                  <th class="col-md-1 hidden-sm hidden-xs">Email</th>
                 </tr>
             </thead>
             <tbody ng-repeat="hospital in hospitals">
                 <tr>
-                    <td><button class="btn btn-primary" ng-click="editHospitals($event, $index)">Edit</button></td>
-                    <td>{{hospital.name}}</td><td>{{hospital.postal}}</td><td>{{hospital.address}}</td><td>{{hospital.phone}}</td><td>{{hospital.dept}}</td><td>{{hospital.title}}</td>
-                    <td>{{hospital.contact1}}</td><td>{{hospital.contact2}}</td><td>{{hospital.email}}</td>
+                    <td class="hidden-xs"><button class="btn btn-primary" ng-click="editHospitals($event, $index)">Edit</button></td>
+                    <td>{{hospital.name}}</td>
+                    <td>{{hospital.postal}}</td>
+                    <td>{{hospital.address}}</td>
+                    <td>{{hospital.phone}}</td>
+                    <td class="hidden-xs">{{hospital.dept}}</td>
+                    <td class="hidden-sm hidden-xs">{{hospital.title}}</td>
+                    <td class="hidden-sm hidden-xs">{{hospital.contact1}}</td>
+                    <td class="hidden-sm hidden-xs">{{hospital.contact2}}</td>
+                    <td class="hidden-sm hidden-xs">{{hospital.email}}</td>
                 </tr>
             </tbody>
         </table>
         <button class="btn btn-warning" ng-click="insertHospitals($event, $index)">New</button>
+    </div>
     </div>
 </div>

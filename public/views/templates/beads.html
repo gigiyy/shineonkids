@@ -1,22 +1,35 @@
-<div class="container">
-    <!-- div class="col-md-12 heading">
-        <h3 ></h3>
-    </div -->
+<div class="container-fluid">
 
     <div class="jumbotron">
+      <div class="table-responsive">
         <h3>Beads</h3>
-        <table class="table">
+        <table class="table table-hover">
             <thead>
-                <tr><th></th><th></th><th>Bead Type</th><th>Bead Name</th><th>Bead Name (JP)</th><th>Description</th><th>Lot Size</th><th>Price</th></tr></tr>
+                <tr>
+                  <th class="col-md-1 col-sm-1 hidden-xs"></th>
+                  <th class="col-md-1 col-sm-1 hidden-xs"></th>
+                  <th class="col-md-1 col-sm-1 col-xs-1">Bead Type</th>
+                  <th class="col-md-2 col-sm-2 col-xs-2">Bead Name</th>
+                  <th class="col-md-2 col-sm-2 col-xs-2">Bead Name (JP)</th>
+                  <th class="col-md-3 col-sm-3 col-xs-3">Description</th>
+                  <th class="col-md-1 col-sm-1 hidden-xs">Lot Size</th>
+                  <th class="col-md-1 col-sm-1 hidden-xs">Price</th>
+                </tr></tr>
             </thead>
             <tbody ng-repeat="bead in beads">
                 <tr>
-                    <td><button class="btn btn-primary" ng-click="editBeads($event, $index)">Edit</button></td>
-                    <td><img src="images/{{bead.name}}.jpg" width="60px" height="60px"></td>
-                    <td>{{bead.type}}</td><td>{{bead.name}}</td><td>{{bead.name_jp}}</td><td>{{bead.desc}}</td><td>{{bead.lotsize}}</td><td>{{bead.price}}</td>
+                    <td class="hidden-xs"><button class="btn btn-primary" ng-click="editBeads($event, $index)">Edit</button></td>
+                    <td class="hidden-xs"><img src="images/{{bead.name}}.jpg" width="60px" height="60px"></td>
+                    <td>{{bead.type}}</td>
+                    <td>{{bead.name}}</td>
+                    <td>{{bead.name_jp}}</td>
+                    <td>{{bead.desc}}</td>
+                    <td class="hidden-xs">{{bead.lotsize}}</td>
+                    <td class="hidden-xs">{{bead.price}}</td>
                 </tr>
             </tbody>
         </table>
         <button class="btn btn-warning" ng-click="newBead($event, $index)">New</button>
     </div>
+  </div>
 </div>

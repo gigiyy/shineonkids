@@ -3,6 +3,7 @@ myApp.controller('hospitalsController',
     function($q, $scope, $route, $location, $http, $log, $mdDialog, $window) {
         $scope.adminEditState = true;
         $scope.hospitals = {};
+        $scope.names = {};
 
         loginCheck()
         getData();
@@ -32,6 +33,7 @@ myApp.controller('hospitalsController',
         function getData() {
             var promise = $http.get('/hospitals').then(function(response) {
                 $scope.hospitals = response.data;
+                $scope.names = _.keys(_.countBy($scope.hospitals, function(data) { return data.name; }));
             });
             return promise;
         }
@@ -129,7 +131,8 @@ myApp.controller('hospitalsController',
         }
 
         $scope.insertHospitals = function(ev, index) {
-            function dialogController($scope, $mdDialog, name, postal, address, phone, dept, title, contact1, contact2, email) {
+            function dialogController($scope, $mdDialog, names, name, postal, address, phone, dept, title, contact1, contact2, email) {
+                $scope.names = names;
                 $scope.name = name;
                 $scope.postal = postal;
                 $scope.address = address;
@@ -142,8 +145,16 @@ myApp.controller('hospitalsController',
                 $scope.index = index;
 
                 $scope.ok = function(name, postal, address, phone, dept, title, contact1, contact2, email) {
+                  if (!name) {
+                    alert('Hospital Name should not be blank');
+                  }
+                  else if (names.indexOf(name) > 0) {
+                    alert('Hospital Name already exists');
+                  }
+                  else {
                     insertHospital(name, postal, address, phone, dept, title, contact1, contact2, email);
                     $mdDialog.hide();
+                  }
                 }
 
                 $scope.cancel = function() {
@@ -164,6 +175,7 @@ myApp.controller('hospitalsController',
                 parent: angular.element(document.body),
                 preserveScope: true,
                 locals: {
+                    names: $scope.names,
                     name: "",
                     postal: "",
                     address: "",

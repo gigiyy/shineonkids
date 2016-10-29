@@ -29,7 +29,7 @@ myApp.controller('transactionHistoryController', ['$q', '$window', '$scope', '$r
     }
 
     function getData() {
-        var promise = $http.get('/dashboard/details ').then(function(response) {
+        var promise = $http.get('/dashboard/details').then(function(response) {
                 $scope.invs = response.data;
             });
         return promise;
