@@ -7,8 +7,10 @@ myApp.controller('orderHistoryController', ['$q', '$window', '$scope', '$route',
   var rawData = null;
 
   loginCheck();
-  //getBeads();
-  getOrders();
+  getBeads()
+    .then(function() {
+      getOrders()
+    });
 
   function loginCheck() {
       $http.get('/login').then(function(response) {
@@ -40,8 +42,6 @@ myApp.controller('orderHistoryController', ['$q', '$window', '$scope', '$route',
   }
 
   function getOrders() {
-    getBeads()
-
     var promise = $http.get('/dashboard/details').then(function(response) {
       rawData = response.data;
 
