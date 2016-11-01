@@ -4,10 +4,14 @@ var dbpath = "data/dbfile.db";
 var sqlite3 = require('sqlite3');
 var moment = require('moment');
 
-router.get('/summary',  function(req, res) {
+router.get('/summary', function(req, res) {
     var results = [];
     var db = new sqlite3.Database(dbpath);
-    var sql = "SELECT asof, bead_type, sum(qty) qty FROM inventory group by asof, bead_type order by asof desc";
+    var sql = "SELECT i.asof, i.name, b.lotsize, sum(case when i.party = 'Order' then 0 else i.qty end) qty, "
+            + "sum(case when i.party = 'Order' then i.qty when i.party = 'Receive' then -1 * i.qty else 0 end) backorder_qty "
+            + "FROM inventory i, beads b "
+            + "WHERE i.name = b.name group by i.asof, i.name, b.lotsize "
+            + "ORDER BY case when type = 'Color' then 1 when type = 'Special' then 2 else 9 end, b.name, i.asof desc";
 
     function callback(rows) {
         results = rows;
@@ -24,7 +28,7 @@ router.get('/summary',  function(req, res) {
 router.get('/details',  function(req, res) {
     var results = [];
     var db = new sqlite3.Database(dbpath);
-    var sql = "SELECT asof, bead_type, qty, party FROM inventory order by asof desc, bead_type asc";
+    var sql = "SELECT asof, name, qty, party FROM inventory order by timestamp desc, asof desc, name asc";
 
     function callback(rows) {
         results = rows;
@@ -40,15 +44,15 @@ router.get('/details',  function(req, res) {
 router.post('/',  function(req, res) {
     var results = [];
     var db = new sqlite3.Database(dbpath);
-    var sql = "INSERT INTO inventory VALUES (?, ?, ?, ?)";
+    var sql = "INSERT INTO inventory (asof, name, qty, party) VALUES (?, ?, ?, ?)";
     var newInventory = {
-        bead_type: req.body.bead_type,
+        name: req.body.name,
         qty: req.body.qty,
         party: req.body.party
     };
 
     var asof = moment().format("YYYY/MM/DD");
-    db.run(sql, [asof, newInventory.bead_type, newInventory.qty, newInventory.party], function(err, rows) {
+    db.run(sql, [asof, newInventory.name, newInventory.qty, newInventory.party], function(err, rows) {
             if(err) {
                 console.log(err);
                 return err;

@@ -1,16 +1,17 @@
-<div class="container">
-
+<div class="container-fluid">
     <div class="jumbotron">
+      <div class="table-responsive">
         <h3>Transaction History</h3>
-        <table class="table">
+        <table class="table table-hover">
             <thead>
                 <tr><th>Date</th><th>Bead Type</th><th>Qty</th><th>Party</th></tr>
             </thead>
             <tbody ng-repeat="inv in invs">
                 <tr>
-                    <td>{{inv.asof}}</td><td>{{inv.bead_type}}</td><td>{{inv.qty}}</td><td>{{inv.party}}</td>
+                    <td>{{inv.asof}}</td><td>{{inv.name}}</td><td>{{inv.qty}}</td><td>{{inv.party}}</td>
                 </tr>
             </tbody>
         </table>
     </div>
+  </div>
 </div>

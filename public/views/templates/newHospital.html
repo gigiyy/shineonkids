@@ -1,8 +1,14 @@
-<md-dialog layout-padding aria-label="Edit Entry">
-  <h4>Edit Entry: {{name}}</h4>
+<md-dialog layout-padding aria-label="New Hospital">
   <br>
     <md-content layout-padding layout="column" style="max-width:100%; max-height:100%;">
       <div id="mediumDiv">
+
+        <div layout="row">
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input class="form-control" type="text" ng-model="name">
+          </div>
+        </div>
 
         <div layout="row">
           <div class="form-group" flex="30">
@@ -51,7 +57,7 @@
 
       <md-dialog-actions>
         <md-button class="md-warn md-raised" ng-click="cancel()">Cancel</md-button>
-        <md-button class="md-primary md-raised" ng-click="ok(postal, address, phone, dept, title, contact1, contact2, email);">Update</md-button>
+        <md-button class="md-primary md-raised" ng-click="ok(name, postal, address, phone, dept, title, contact1, contact2, email);">Insert</md-button>
       </md-dialog-actions>
     </md-content>
 </md-dialog>

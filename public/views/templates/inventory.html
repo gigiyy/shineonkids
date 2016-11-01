@@ -1,25 +1,41 @@
-<div class="container">
-    <!-- div class="col-md-12 heading">
-        <h3 translate="WELCOME"></h3>
-    </div -->
-
-    <script type="text/ng-template" id="save-dialog.tmpl.html">
-      <md-dialog>Sample Dialog</md-dialog>
-    </script>
+<div class="container-fluid">
 
     <div class="jumbotron">
+      <div class="table-responsive">
         <h3>Inventory</h3>
-        <table class="table">
+        <table class="table table-hover">
             <thead>
-                <tr><th ng-repeat="dt in dates">{{dt.substring(5)}}<br></th></tr>
+                <tr>
+                  <th class="hidden-xs"></th>
+                  <th class="hidden-xs"></th>
+                  <th class="hidden-xs"></th>
+                  <th class="col-md-2 col-sm-3 col-xs-3">Beads</th>
+                  <th>Total<br>(Order)</th>
+                  <th ng-repeat="dt in dates" ng-show="$index >= 0 && $index < 3">{{dt.substring(5,10)}}<br>{{dt.substring(10)}}<br></th>
+                  <th ng-repeat="dt in dates" ng-show="$index >= 3 && $index < 6" class="hidden-xs">{{dt.substring(5,10)}}<br>{{dt.substring(10)}}<br></th>
+                  <th ng-repeat="dt in dates" ng-show="$index >= 6 && $index < 10" class="hidden-sm hidden-xs">{{dt.substring(5,10)}}<br>{{dt.substring(10)}}<br></th>
+                </tr>
             </thead>
             <tbody ng-repeat="inv in invs">
                 <tr>
-                    <td><button class="btn btn-primary" ng-click="showPromptAdd($event, $index)">Add</button></td>
-                    <td><button class="btn btn-warning" ng-click="showPromptDeliver($event, $index)">Delv</button></td>
-                    <td>{{inv.bead}}</td><td>{{inv.total}}</td><td>{{inv.qty0}}</td><td>{{inv.qty1}}</td><td>{{inv.qty2}}</td><td>{{inv.qty3}}</td><td>{{inv.qty4}}</td><td>{{inv.qty5}}</td><td>{{inv.qty6}}</td><td>{{inv.qty7}}</td><td>{{inv.qty8}}</td><td>{{inv.qty9}}</td><td>{{inv.qty10}}</td>
+                    <td class="hidden-xs"><button class="btn btn-danger btn-sm" ng-click="showPromptOrder($event, $index)">Order</button></td>
+                    <td class="hidden-xs"><button class="btn btn-primary btn-sm" ng-click="showPromptAdd($event, $index)">Add</button></td>
+                    <td class="hidden-xs"><button class="btn btn-warning btn-sm" ng-click="showPromptDeliver($event, $index)">Delv</button></td>
+                    <td>{{inv.bead}}</td>
+                    <td>{{inv.total}}<br>{{inv.backorder_total}}</td>
+                    <td>{{inv.qty0}}<br>{{inv.backorder_qty0}}</td>
+                    <td>{{inv.qty1}}<br>{{inv.backorder_qty1}}</td>
+                    <td>{{inv.qty2}}<br>{{inv.backorder_qty2}}</td>
+                    <td class="hidden-xs">{{inv.qty3}}<br>{{inv.backorder_qty3}}</td>
+                    <td class="hidden-xs">{{inv.qty4}}<br>{{inv.backorder_qty4}}</td>
+                    <td class="hidden-xs">{{inv.qty5}}<br>{{inv.backorder_qty5}}</td>
+                    <td class="hidden-sm hidden-xs">{{inv.qty6}}<br>{{inv.backorder_qty6}}</td>
+                    <td class="hidden-sm hidden-xs">{{inv.qty7}}<br>{{inv.backorder_qty7}}</td>
+                    <td class="hidden-sm hidden-xs">{{inv.qty8}}<br>{{inv.backorder_qty8}}</td>
+                    <td class="hidden-sm hidden-xs">{{inv.qty9}}<br>{{inv.backorder_qty9}}</td>
                 </tr>
             </tbody>
         </table>
     </div>
+  </div>
 </div>

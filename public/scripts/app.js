@@ -21,6 +21,10 @@ myApp.config(['$routeProvider', function($routeProvider) {
             templateUrl: '/views/templates/transactionHistory.html',
             controller: 'transactionHistoryController'
         })
+        .when('/order_histrory', {
+            templateUrl: '/views/templates/orderHistory.html',
+            controller: 'orderHistoryController'
+        })
         .when('/notImplemented', {
             templateUrl: '/views/templates/notImplemented.html'
         })

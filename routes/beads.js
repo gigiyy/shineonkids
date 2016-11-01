@@ -7,7 +7,8 @@ router.get('/',  function(req, res) {
 
     var results = [];
     var db = new sqlite3.Database(dbpath);
-    var sql = "SELECT bead_type, lotsize, price, bead_type_jp, desc FROM beads";
+    var sql = "SELECT name, type, lotsize, price, name_jp, desc FROM beads "
+            + "ORDER BY CASE WHEN type = 'Color' THEN 1 WHEN type = 'Special' THEN 2 ELSE 9 END, name";
 
     function callback(rows) {
         results = rows;
@@ -23,17 +24,18 @@ router.get('/',  function(req, res) {
 
 router.put('/',  function(req, res) {
     var newBead = {
-        bead_type: req.body.bead_type,
+        name: req.body.name,
+        type: req.body.type,
         lotsize: req.body.lotsize,
         price: req.body.price,
-        bead_type_jp: req.body.bead_type_jp,
+        name_jp: req.body.name_jp,
         desc: req.body.desc
     };
 
     var results = [];
     var db = new sqlite3.Database(dbpath);
-    db.run("UPDATE beads SET lotsize = ?, price = ?, bead_type_jp = ?, desc = ? WHERE bead_type = ?",
-    [newBead.lotsize, newBead.price, newBead.bead_type_jp, newBead.desc, newBead.bead_type], function(err, rows) {
+    db.run("UPDATE beads SET type = ?, lotsize = ?, price = ?, name_jp = ?, desc = ? WHERE name = ?",
+    [newBead.type, newBead.lotsize, newBead.price, newBead.name_jp, newBead.desc, newBead.name], function(err, rows) {
             if(err) {
                 return err;
             }
@@ -41,4 +43,28 @@ router.put('/',  function(req, res) {
     });
 
 });
+
+router.post('/',  function(req, res) {
+    var results = [];
+    var db = new sqlite3.Database(dbpath);
+    var sql = "INSERT INTO beads VALUES (?, ?, ?, ?, ?, ?)";
+
+    var newBead = {
+        name: req.body.name,
+        type: req.body.type,
+        lotsize: req.body.lotsize,
+        price: req.body.price,
+        name_jp: req.body.name_jp,
+        desc: req.body.desc
+    };
+
+    db.run(sql, [newBead.name, newBead.type, newBead.lotsize, newBead.price, newBead.name_jp, newBead.desc], function(err, rows) {
+            if(err) {
+                console.log(err);
+                return err;
+            }
+            return;
+    });
+});
+
 module.exports = router;
