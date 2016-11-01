@@ -45,7 +45,7 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
         var promise = $http.get('/dashboard/summary').then(function(response) {
             rawData = response.data;
             var byasof = _.countBy(rawData, function(data) { return data.asof; });
-            var dates = _.keys(_.countBy(rawData, function(data) { return data.asof; }));
+            var dates = _.sortBy(_.keys(_.countBy(rawData, function(data) { return data.asof; }))).reverse();
             var beads = _.uniq(_.map(rawData, function(data){ return {'name':data.name, 'lotsize':data.lotsize}; }), 'name');
 
             $scope.invs = [];
