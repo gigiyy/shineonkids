@@ -1,5 +1,5 @@
-myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$location', '$http', '$uibModal', '$log', '$mdDialog',
-    function($q, $window, $scope, $route, $location, $http, $uibModal, $log, $mdDialog) {
+myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$location', '$http', '$uibModal', '$log', '$mdDialog', '$cookies',
+    function($q, $window, $scope, $route, $location, $http, $uibModal, $log, $mdDialog, $cookies) {
     $scope.adminEditState = true;
     $scope.invs = {};
     $scope.keys = {};
@@ -139,7 +139,8 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
 
 
     $scope.showPromptDeliver = function(ev, index) {
-        function dialogController($scope, $mdDialog, hospitals, qtys, selectedBead, index) {
+        function dialogController($scope, $mdDialog, selected, hospitals, qtys, selectedBead, index) {
+            $scope.selected = selected;
             $scope.hospitals = hospitals;
             $scope.qtys = qtys;
             $scope.selectedBead = selectedBead;
@@ -147,6 +148,7 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
 
             $scope.ok = function(bead, qty, hospital) {
                 qty = -1* qty;
+                $cookies.put('hospital', hospital);
                 updateInventory(index, qty, hospital);
                 $mdDialog.hide();
             }
@@ -169,6 +171,7 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
             parent: angular.element(document.body),
             preserveScope: true,
             locals: {
+                selected: $cookies.get('hospital'),
                 hospitals: $scope.hospitals,
                 qtys: $scope.qtys,
                 selectedBead: $scope.invs[index].bead,
