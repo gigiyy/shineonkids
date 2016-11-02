@@ -1,5 +1,5 @@
-myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$location', '$http', '$uibModal', '$log', '$mdDialog',
-    function($q, $window, $scope, $route, $location, $http, $uibModal, $log, $mdDialog) {
+myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$location', '$http', '$uibModal', '$log', '$mdDialog', '$cookies',
+    function($q, $window, $scope, $route, $location, $http, $uibModal, $log, $mdDialog, $cookies) {
     $scope.adminEditState = true;
     $scope.invs = {};
     $scope.keys = {};
@@ -193,16 +193,24 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
         }
     }
 
+    function getSelected(selected, hospitals) {
+      for (i = 0; i < hospitals.length; i++) {
+        if (hospitals[i].name === selected) {
+          return hospitals[i]
+        }
+      }
+    }
 
     $scope.showPromptDeliver = function(ev, index) {
         var aqty = $scope.invs[index].total;
         var abead = $scope.invs[index].bead;
 
-        function dialogController($scope, $mdDialog, hospitals, selectedBead, lotsize, index) {
+        function dialogController($scope, $mdDialog, selected, hospitals, selectedBead, lotsize, index) {
             $scope.hospitals = hospitals;
             $scope.selectedBead = selectedBead;
             $scope.lotsize = lotsize;
             $scope.index = index;
+            $scope.hospital = getSelected(selected, hospitals)
 
             $scope.ok = function(qty, hospital) {
                 if (!hospital) {
@@ -224,6 +232,7 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
                 }
                 else {
                     qty = -1* qty;
+                    $cookies.put('hospital', hospital);
                     updateInventory(index, qty, hospital);
                     $mdDialog.hide();
                 }
@@ -247,6 +256,7 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
             parent: angular.element(document.body),
             preserveScope: true,
             locals: {
+                selected: $cookies.get('hospital'),
                 hospitals: $scope.hospitals,
                 selectedBead: $scope.invs[index].bead,
                 lotsize: $scope.invs[index].lotsize,
