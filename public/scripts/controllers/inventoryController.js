@@ -73,13 +73,7 @@ myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$
                 }
                 $scope.invs.push(inv);
             }
-            //dates.unshift("xxxxxTotal(Order)");
-            //dates.unshift("xxxxxBeads");
-            //dates.unshift("xxxxx     ");
-            //dates.unshift("xxxxx      ");
-            //dates.unshift("xxxxx    ");
             $scope.dates = dates;
-
         });
         return promise;
     }

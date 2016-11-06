@@ -4,11 +4,21 @@
         <h3>Transaction History</h3>
         <table class="table table-hover">
             <thead>
-                <tr><th>Date</th><th>Bead Type</th><th>Qty</th><th>Party</th></tr>
+                <tr>
+                  <th class="col-md-1 col-sm-1 hidden-xs"></th>
+                  <th class="col-md-2 col-sm-2 col-xs-2">Date</th>
+                  <th class="col-md-2 col-sm-2 col-xs-2">Bead Name</th>
+                  <th class="col-md-2 col-sm-2 col-xs-2"># of Beads</th>
+                  <th class="col-md-2 col-sm-2 col-xs-2">Party</th>
+                </tr>
             </thead>
             <tbody ng-repeat="inv in invs">
                 <tr>
-                    <td>{{inv.asof}}</td><td>{{inv.name}}</td><td>{{inv.qty}}</td><td>{{inv.party}}</td>
+                    <td class="hidden-xs"><button class="btn btn-danger btn-sm" ng-click="showPromptOrder($event, $index)">Delete</button></td>
+                    <td>{{inv.asof}}</td>
+                    <td>{{inv.name}}</td>
+                    <td>{{inv.qty}}</td>
+                    <td>{{inv.party}}</td>
                 </tr>
             </tbody>
         </table>

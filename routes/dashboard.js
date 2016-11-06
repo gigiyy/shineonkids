@@ -25,7 +25,7 @@ router.get('/summary', function(req, res) {
 
 });
 
-router.get('/details',  function(req, res) {
+router.get('/details', function(req, res) {
     var results = [];
     var db = new sqlite3.Database(dbpath);
     var sql = "SELECT asof, name, qty, party FROM inventory order by timestamp desc, asof desc, name asc";
@@ -53,6 +53,26 @@ router.post('/',  function(req, res) {
 
     var asof = moment().format("YYYY/MM/DD");
     db.run(sql, [asof, newInventory.name, newInventory.qty, newInventory.party], function(err, rows) {
+            if(err) {
+                console.log(err);
+                return err;
+            }
+            return;
+    });
+});
+
+router.put('/delete',  function(req, res) {
+    var results = [];
+    var db = new sqlite3.Database(dbpath);
+    var sql = "DELETE FROM inventory WHERE asof = ? and name = ? and qty = ? and party = ?";
+    var delInventory = {
+        asof: req.body.asof,
+        name: req.body.name,
+        qty: req.body.qty,
+        party: req.body.party
+    };
+
+    db.run(sql, [delInventory.asof, delInventory.name, delInventory.qty, delInventory.party], function(err, rows) {
             if(err) {
                 console.log(err);
                 return err;

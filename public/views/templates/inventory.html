@@ -9,8 +9,8 @@
                   <th class="hidden-xs"></th>
                   <th class="hidden-xs"></th>
                   <th class="hidden-xs"></th>
-                  <th class="col-md-2 col-sm-3 col-xs-3">Beads</th>
-                  <th>Total<br>(Order)</th>
+                  <th class="col-md-2 col-sm-3 col-xs-3">Bead Name</th>
+                  <th class="col-md-2 col-sm-2 col-xs-2">Total# of Beads<br>(Back Order)</th>
                   <th ng-repeat="dt in dates" ng-show="$index >= 0 && $index < 3">{{dt.substring(5,10)}}<br>{{dt.substring(10)}}<br></th>
                   <th ng-repeat="dt in dates" ng-show="$index >= 3 && $index < 6" class="hidden-xs">{{dt.substring(5,10)}}<br>{{dt.substring(10)}}<br></th>
                   <th ng-repeat="dt in dates" ng-show="$index >= 6 && $index < 10" class="hidden-sm hidden-xs">{{dt.substring(5,10)}}<br>{{dt.substring(10)}}<br></th>
