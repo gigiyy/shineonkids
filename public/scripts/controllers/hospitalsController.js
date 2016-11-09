@@ -76,6 +76,25 @@ myApp.controller('hospitalsController',
             return deferred.promise;
         };
 
+        deleteHospital = function(name){
+            var deferred = $q.defer();
+
+            $http.put('/hospitals/delete',
+                {name: name})
+                .success(function (data, status) {
+                    if(status === 200 ){
+                        deferred.resolve();
+                    } else {
+                        deferred.reject();
+                    }
+                })
+                .error(function (data) {
+                    deferred.reject();
+                });
+            $window.location.reload();
+            return deferred.promise;
+        };
+
         $scope.editHospitals = function(ev, index) {
             function dialogController($scope, $mdDialog, name, postal, address, phone, dept, title, contact1, contact2, email) {
                 $scope.name = name;
@@ -96,6 +115,13 @@ myApp.controller('hospitalsController',
 
                 $scope.cancel = function() {
                     $mdDialog.hide();
+                }
+
+                $scope.delete = function() {
+                    if (confirm('Is it ok to delete Hospital: ' + name + ' ?')) {
+                      deleteHospital(name);
+                      $mdDialog.hide();
+                    }
                 }
             }
 

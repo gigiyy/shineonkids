@@ -78,6 +78,25 @@ myApp.controller('beadsController',
              return deferred.promise;
          };
 
+         deleteBead = function(name){
+             var deferred = $q.defer();
+
+             $http.put('/beads/delete',
+                 {name: name})
+                 .success(function (data, status) {
+                     if(status === 200 ){
+                         deferred.resolve();
+                     } else {
+                         deferred.reject();
+                     }
+                 })
+                 .error(function (data) {
+                     deferred.reject();
+                 });
+             $window.location.reload();
+             return deferred.promise;
+         };
+
         $scope.editBeads = function(ev, index) {
             function dialogController($scope, $mdDialog, types, name, type, lotsize, price, name_jp, desc) {
                 $scope.types = types;
@@ -101,6 +120,13 @@ myApp.controller('beadsController',
 
                 $scope.cancel = function() {
                     $mdDialog.hide();
+                }
+
+                $scope.delete = function() {
+                    if (confirm('Is it ok to delete Bead: ' + name + ' ?')) {
+                      deleteBead(name);
+                      $mdDialog.hide();
+                    }
                 }
             }
 

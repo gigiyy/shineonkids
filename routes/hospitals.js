@@ -71,4 +71,22 @@ router.post('/',  function(req, res) {
     });
 });
 
+
+router.put('/delete',  function(req, res) {
+    var results = [];
+    var db = new sqlite3.Database(dbpath);
+    var sql = "DELETE FROM hospitals WHERE name = ?";
+    var delHospital = {
+        name: req.body.name
+    };
+
+    db.run(sql, [delHospital.name], function(err, rows) {
+            if(err) {
+                console.log(err);
+                return err;
+            }
+            return;
+    });
+});
+
 module.exports = router;

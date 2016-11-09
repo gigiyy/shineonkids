@@ -67,4 +67,22 @@ router.post('/',  function(req, res) {
     });
 });
 
+
+router.put('/delete',  function(req, res) {
+    var results = [];
+    var db = new sqlite3.Database(dbpath);
+    var sql = "DELETE FROM beads WHERE name = ?";
+    var delBead = {
+        name: req.body.name
+    };
+
+    db.run(sql, [delBead.name], function(err, rows) {
+            if(err) {
+                console.log(err);
+                return err;
+            }
+            return;
+    });
+});
+
 module.exports = router;

@@ -61,30 +61,37 @@ myApp.controller('transactionHistoryController', ['$q', '$window', '$scope', '$r
     };
 
 
-    $scope.showPromptOrder = function(ev, index) {
-        function dialogController($scope, $mdDialog, index, selectedAsof, selectedBead, selectedQty, selectedParty) {
-            $scope.selectedAsof = selectedAsof;
-            $scope.selectedBead = selectedBead;
-            $scope.selectedQty = selectedQty;
-            $scope.selectedParty = selectedParty;
+    $scope.editInventory = function(ev, index) {
+        function dialogController($scope, $mdDialog, index, date, bead, qty, party) {
+            $scope.date = date;
+            $scope.bead = bead;
+            $scope.qty = qty;
+            $scope.party = party;
             $scope.index = index;
 
             $scope.ok = function(qty) {
-                deleteInventory(index);
+                //updateInventory(index);
                 $mdDialog.hide();
             }
 
             $scope.cancel = function() {
                 $mdDialog.hide();
             }
+
+            $scope.delete = function() {
+                if (confirm('Is it ok to delete this inventory?')) {
+                  deleteInventory(index);
+                  $mdDialog.hide();
+                }
+            }
         }
 
         $mdDialog.show({
             controller: dialogController,
             targetEvent: ev,
-            ariaLabel:  'Delete Inventory',
+            ariaLabel:  'Edit Inventory',
             clickOutsideToClose: true,
-            templateUrl: 'views/templates/delInvDialog.html',
+            templateUrl: 'views/templates/editInventory.html',
             onComplete: afterShowAnimation,
             size: 'large',
             bindToController: true,
@@ -92,10 +99,10 @@ myApp.controller('transactionHistoryController', ['$q', '$window', '$scope', '$r
             parent: angular.element(document.body),
             preserveScope: true,
             locals: {
-                selectedAsof: $scope.invs[index].asof,
-                selectedBead: $scope.invs[index].name,
-                selectedQty: $scope.invs[index].qty,
-                selectedParty: $scope.invs[index].party,
+                date: $scope.invs[index].asof,
+                bead: $scope.invs[index].name,
+                qty: $scope.invs[index].qty,
+                party: $scope.invs[index].party,
                 index: index
             }
         });
