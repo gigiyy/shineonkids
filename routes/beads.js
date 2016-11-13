@@ -8,7 +8,7 @@ router.get('/',  function(req, res) {
     var results = [];
     var db = new sqlite3.Database(dbpath);
     var sql = "SELECT name, type, lotsize, price, name_jp, desc FROM beads "
-            + "ORDER BY CASE WHEN type = 'Color' THEN 1 WHEN type = 'Special' THEN 2 ELSE 9 END, name";
+            + "ORDER BY CASE WHEN type = 'Color' THEN 1 WHEN type = 'Special' THEN 2 WHEN type = 'Alphabet' THEN 8 WHEN type = 'Number' THEN 9 ELSE 5 END, name";
 
     function callback(rows) {
         results = rows;

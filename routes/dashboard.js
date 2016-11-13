@@ -11,7 +11,7 @@ router.get('/summary', function(req, res) {
             + "sum(case when i.party = 'Order' then i.qty when i.party = 'Receive' then -1 * i.qty else 0 end) backorder_qty "
             + "FROM inventory i, beads b "
             + "WHERE i.name = b.name group by i.asof, i.name, b.lotsize "
-            + "ORDER BY case when type = 'Color' then 1 when type = 'Special' then 2 else 9 end, b.name, i.asof desc";
+            + "ORDER BY case when type = 'Color' then 1 when type = 'Special' then 2 when type = 'Alphabet' then 8 when type = 'Number' then 9 else 5 end, b.name, i.asof desc";
 
     function callback(rows) {
         results = rows;
