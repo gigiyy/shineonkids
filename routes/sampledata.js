@@ -65,7 +65,7 @@ var initialize = function (err, done) {
 				{'name':'Orange Bead', 'type':'Color', 'qty':200, 'lotsize':500, 'price':18, 'name_jp':'オレンジ', 'desc':'ライン留置・抜去'},
 				{'name':'Bumpy Bead', 'type':'Special', 'qty':200, 'lotsize':30, 'price':8, 'name_jp':'でこぼこ', 'desc':'何かを乗り越えたとき'},
 				{'name':'Black Bead', 'type':'Color', 'qty':200, 'lotsize':500, 'price':18, 'name_jp':'黒', 'desc':'穿刺'},
-				{'name':'Glow in The Dark', 'type':'Special', 'qty':200, 'lotsize':500, 'price':30, 'name_jp':'蛍光', 'desc':'放射線'},
+				{'name':'Glow in the Dark', 'type':'Special', 'qty':200, 'lotsize':500, 'price':30, 'name_jp':'蛍光', 'desc':'放射線'},
 				{'name':'Dark Green Bead', 'type':'Color', 'qty':200, 'lotsize':500, 'price':18, 'name_jp':'深緑', 'desc':'幹細胞採取・透析・筋膜切開・高カロリー輸液'},
 				{'name':'Light Green Bead', 'type':'Color', 'qty':200, 'lotsize':500, 'price':18, 'name_jp':'薄緑', 'desc':'検査・画像検査'},
 				{'name':'Red Bead', 'type':'Color', 'qty':200, 'lotsize':500, 'price':18, 'name_jp':'赤', 'desc':'輸血・血液製剤・アフェレーシス'},
