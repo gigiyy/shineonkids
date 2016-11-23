@@ -1,38 +1,16 @@
-myApp.controller('inventoryController', ['$q', '$window', '$scope', '$route', '$location', '$http', '$uibModal', '$log', '$mdDialog', '$cookies',
-    function($q, $window, $scope, $route, $location, $http, $uibModal, $log, $mdDialog, $cookies) {
+myApp.controller('inventoryController',
+  ['$q', '$window', '$scope', '$route', '$location', '$http', '$uibModal', '$log', '$mdDialog', '$cookies', 'LoginService',
+  function($q, $window, $scope, $route, $location, $http, $uibModal, $log, $mdDialog, $cookies, LoginService) {
     $scope.adminEditState = true;
     $scope.invs = {};
     $scope.keys = {};
     $scope.addition = 0;
     $scope.hospitals = {};
 
-    loginCheck();
+    LoginService.loginCheck();
     getHospitals();
     var rawData = null;
-
     getData();
-
-    function loginCheck() {
-        $http.get('/login').then(function(response) {
-          var user = response.data;
-          if (user == '') {
-            showPromptLogin();
-          }
-        });
-    }
-
-    function showPromptLogin() {
-        $mdDialog.show({
-            ariaLabel:  'Login',
-            clickOutsideToClose: true,
-            templateUrl: 'views/templates/loginDialog.html',
-            size: 'large',
-            bindToController: true,
-            autoWrap: false,
-            parent: angular.element(document.body),
-            preserveScope: true,
-        });
-    }
 
     function getHospitals() {
         var promise = $http.get('/hospitals').then(function(response) {

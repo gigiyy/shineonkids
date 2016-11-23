@@ -1,35 +1,13 @@
 myApp.controller('beadsController',
-    ['$q', '$scope', '$route', '$location', '$http', '$log', '$mdDialog', '$window',
-    function($q, $scope, $route, $location, $http, $log, $mdDialog, $window) {
+    ['$q', '$scope', '$route', '$location', '$http', '$log', '$mdDialog', '$window', 'LoginService',
+    function($q, $scope, $route, $location, $http, $log, $mdDialog, $window, LoginService) {
         $scope.adminEditState = true;
         $scope.beads = {};
         $scope.names = {};
         $scope.types = {};
 
-        loginCheck()
+        LoginService.loginCheck();
         getData();
-
-        function loginCheck() {
-            $http.get('/login').then(function(response) {
-              var user = response.data;
-              if (user == '') {
-                showPromptLogin();
-              }
-            });
-        }
-
-        function showPromptLogin() {
-            $mdDialog.show({
-                ariaLabel:  'Login',
-                clickOutsideToClose: true,
-                templateUrl: 'views/templates/loginDialog.html',
-                size: 'large',
-                bindToController: true,
-                autoWrap: false,
-                parent: angular.element(document.body),
-                preserveScope: true,
-            });
-        }
 
         function getData() {
             var promise = $http.get('/beads').then(function(response) {
