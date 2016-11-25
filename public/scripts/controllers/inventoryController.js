@@ -40,8 +40,8 @@ myApp.controller('inventoryController',
                             if (rawData[i].backorder_qty != 0) {
                               inv["backorder_qty" + j] = '(' + rawData[i].backorder_qty + ')';
                             }
-                            total += rawData[i].qty;
-                            backorder_total += rawData[i].backorder_qty;
+                            total += Number(rawData[i].qty);
+                            backorder_total += Number(rawData[i].backorder_qty);
                         }
                     }
                 }

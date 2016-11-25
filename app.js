@@ -1,24 +1,23 @@
 var express = require('express');
 var app = express();
-var fs = require('fs');
+//var fs = require('fs');
 var moment = require('moment');
-var dbpath = "data/dbfile.db";
-var sampledata = require('./routes/sampledata');
+//var sampledata = require('./routes/sampledata');
 var path = require('path');
 
-try{
-    if (fs.statSync(dbpath).isFile()) {
-    	console.log("Database initialized already");
-    }
-}catch (err){
-	if (err.errno == -4058){
-    	console.log("No db file exists");
-    	console.log("Initializing database, please wait.....");
-    	sampledata();
-    	console.log("Database initialized!");
-	} else
-		console.log(err);
-}
+//try{
+//    if (fs.statSync(dbpath).isFile()) {
+//    	console.log("Database initialized already");
+//    }
+//}catch (err){
+//	if (err.errno == -4058){
+//   	console.log("No db file exists");
+//    	console.log("Initializing database, please wait.....");
+//    	sampledata();
+//    	console.log("Database initialized!");
+//	} else
+//		console.log(err);
+//}
 
 var bodyParser = require('body-parser');
 var session = require('express-session');

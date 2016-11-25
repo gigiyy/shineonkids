@@ -18,11 +18,11 @@ myApp.controller('beadsController',
             return promise;
         }
 
-       updateBead = function(name, type, lotsize, price, name_jp, desc){
+       updateBead = function(name, type, lotsize, price, name_jp, description){
             var deferred = $q.defer();
 
             $http.put('/beads',
-                {name:name, type:type, lotsize:lotsize, price:price, name_jp:name_jp, desc:desc})
+                {name:name, type:type, lotsize:lotsize, price:price, name_jp:name_jp, description:description})
                 .success(function (data, status) {
                     if(status === 200 ){
                         deferred.resolve();
@@ -37,11 +37,11 @@ myApp.controller('beadsController',
             return deferred.promise;
         };
 
-        insertBead = function(name, type, lotsize, price, name_jp, desc){
+        insertBead = function(name, type, lotsize, price, name_jp, description){
              var deferred = $q.defer();
 
              $http.post('/beads',
-                 {name:name, type:type, lotsize:lotsize, price:price, name_jp:name_jp, desc:desc})
+                 {name:name, type:type, lotsize:lotsize, price:price, name_jp:name_jp, description:description})
                  .success(function (data, status) {
                      if(status === 200 ){
                          deferred.resolve();
@@ -76,22 +76,22 @@ myApp.controller('beadsController',
          };
 
         $scope.editBeads = function(ev, index) {
-            function dialogController($scope, $mdDialog, types, name, type, lotsize, price, name_jp, desc) {
+            function dialogController($scope, $mdDialog, types, name, type, lotsize, price, name_jp, description) {
                 $scope.types = types;
                 $scope.name = name;
                 $scope.type = type;
                 $scope.lotsize = lotsize;
                 $scope.price = price;
                 $scope.name_jp = name_jp;
-                $scope.desc = desc;
+                $scope.description = description;
                 $scope.index = index;
 
-                $scope.ok = function(type, lotsize, price, name_jp, desc) {
+                $scope.ok = function(type, lotsize, price, name_jp, description) {
                   if (!type) {
                     alert('Bead Type should not be blank');
                   }
                   else {
-                    updateBead(name, type, lotsize, price, name_jp, desc);
+                    updateBead(name, type, lotsize, price, name_jp, description);
                     $mdDialog.hide();
                   }
                 }
@@ -127,7 +127,7 @@ myApp.controller('beadsController',
                     lotsize: $scope.beads[index].lotsize,
                     price: $scope.beads[index].price,
                     name_jp: $scope.beads[index].name_jp,
-                    desc: $scope.beads[index].desc,
+                    description: $scope.beads[index].description,
                     index: index
                 }
             });
@@ -138,7 +138,7 @@ myApp.controller('beadsController',
         }
 
         $scope.newBead = function(ev, index) {
-            function dialogController($scope, $mdDialog, names, types, name, type, lotsize, price, name_jp, desc) {
+            function dialogController($scope, $mdDialog, names, types, name, type, lotsize, price, name_jp, description) {
                 $scope.names = names;
                 $scope.types = types;
                 $scope.name = name;
@@ -146,10 +146,10 @@ myApp.controller('beadsController',
                 $scope.lotsize = lotsize;
                 $scope.price = price;
                 $scope.name_jp = name_jp;
-                $scope.desc = desc;
+                $scope.description = description;
                 $scope.index = index;
 
-                $scope.ok = function(name, type, lotsize, price, name_jp, desc) {
+                $scope.ok = function(name, type, lotsize, price, name_jp, description) {
                   if (!name) {
                     alert('Bead Name should not be blank');
                   }
@@ -160,7 +160,7 @@ myApp.controller('beadsController',
                     alert('Bead Type should not be blank');
                   }
                   else {
-                    insertBead(name, type, lotsize, price, name_jp, desc);
+                    insertBead(name, type, lotsize, price, name_jp, description);
                     $mdDialog.hide();
                   }
                 }
@@ -190,7 +190,7 @@ myApp.controller('beadsController',
                     lotsize: "",
                     price: "",
                     name_jp: "",
-                    desc: "",
+                    description: "",
                     index: index
                 }
             });

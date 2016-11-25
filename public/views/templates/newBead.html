@@ -20,25 +20,25 @@
         </div>
 
         <div class="form-group">
-          <label for="desc">Description:</label>
-          <input class="form-control" type="text" ng-model="desc">
+          <label for="description">Description:</label>
+          <input class="form-control" type="text" ng-model="description">
         </div>
 
         <div layout="row">
         <div class="form-group">
           <label for="lotsize">Lot size:</label>
-          <input class="form-control" type="text" ng-model="lotsize">
+          <input class="form-control" type="number" ng-model="lotsize">
         </div>
         <div class="form-group">
           <label for="price">Price:</label>
-          <input class="form-control" type="text" ng-model="price">
+          <input class="form-control" type="number" ng-model="price">
         </div>
       </div>
       </div>
 
       <md-dialog-actions>
         <md-button class="md-warn md-raised" ng-click="cancel()">Cancel</md-button>
-        <md-button class="md-primary md-raised" ng-click="ok(name, type, lotsize, price, name_jp, desc);">Insert</md-button>
+        <md-button class="md-primary md-raised" ng-click="ok(name, type, lotsize, price, name_jp, description);">Insert</md-button>
       </md-dialog-actions>
     </md-content>
 </md-dialog>
