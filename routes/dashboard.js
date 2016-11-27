@@ -88,7 +88,7 @@ router.post('/',  function(req, res) {
         party: req.body.party
     };
 
-    var asof = moment().format("YYYY/MM/DD");
+    var asof = moment().utc().add(+9, 'hours').format("YYYY/MM/DD");
 
     /*
     db.run(sql, [asof, newInventory.name, newInventory.qty, newInventory.party], function(err, rows) {
