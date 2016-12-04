@@ -33,3 +33,9 @@ CREATE TABLE inventory
      party character varying(100) NOT NULL,
      timestamp timestamp NOT NULL default CURRENT_TIMESTAMP
      );
+
+CREATE TABLE users
+     (
+     username character varying(10) NOT NULL,
+     password character varying(10) NOT NULL
+     );
