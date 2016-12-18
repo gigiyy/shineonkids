@@ -12,9 +12,9 @@
                   <th class="hidden-xs"></th>
                   <th class="col-md-2 col-sm-3 col-xs-3">Bead Name</th>
                   <th class="col-md-2 col-sm-2 col-xs-2">Total# of Beads<br>(Back Order)</th>
-                  <th ng-repeat="dt in dates" ng-show="$index >= 0 && $index < 3">{{dt.substring(5,10)}}<br>{{dt.substring(10)}}<br></th>
-                  <th ng-repeat="dt in dates" ng-show="$index >= 3 && $index < 5" class="hidden-xs">{{dt.substring(5,10)}}<br>{{dt.substring(10)}}<br></th>
-                  <th ng-repeat="dt in dates" ng-show="$index >= 6 && $index < 8" class="hidden-sm hidden-xs">{{dt.substring(5,10)}}<br>{{dt.substring(10)}}<br></th>
+                  <th ng-repeat="dt in dates" ng-show="$index >= 0 && $index < 3">{{dt.substring(5,10)}}</th>
+                  <th ng-repeat="dt in dates" ng-show="$index >= 3 && $index < 5" class="hidden-xs">{{dt.substring(5,10)}}</th>
+                  <th ng-repeat="dt in dates" ng-show="$index >= 5 && $index < 8" class="hidden-sm hidden-xs">{{dt.substring(5,10)}}</th>
                 </tr>
             </thead>
             <tbody ng-repeat="inv in invs">
@@ -23,8 +23,8 @@
                     <td class="hidden-xs"><button class="btn btn-primary btn-sm" ng-click="showPromptAdd($event, $index)">Add</button></td>
                     <td class="hidden-xs"><button class="btn btn-warning btn-sm" ng-click="showPromptDeliver($event, $index)">Delv</button></td>
                     <td class="hidden-xs"><img src="images/{{inv.bead}}.jpg" width="50px" height="50px"></td>
-                    <td>{{inv.bead}}</td>
-                    <td>{{inv.total}}<br>{{inv.backorder_total}}</td>
+                    <td class="col-md-2 col-sm-3 col-xs-3">{{inv.bead}}<br>{{inv.bead_jp}}</td>
+                    <td class="col-md-2 col-sm-2 col-xs-2">{{inv.total}}<br>{{inv.backorder_total}}</td>
                     <td>{{inv.qty0}}<br>{{inv.backorder_qty0}}</td>
                     <td>{{inv.qty1}}<br>{{inv.backorder_qty1}}</td>
                     <td>{{inv.qty2}}<br>{{inv.backorder_qty2}}</td>

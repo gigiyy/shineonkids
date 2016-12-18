@@ -1,5 +1,5 @@
 INSERT INTO users (username, password)
-VALUES ('sokids', 'boc')
+VALUES ('sokids', 'boc');
 
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
 VALUES ('札幌医科大学附属病院', '060-8543', '札幌市中央区南1条西16丁目291番地', '011-611-2111（代）（内線 3422）', '小児科看護室', '看護副師長', '三上', '', 'kayok@sapmed.ac.jp');

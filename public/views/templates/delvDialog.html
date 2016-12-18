@@ -8,18 +8,15 @@
         <md-select ng-model="hospital" aria-label="Select Hospital:" >
            <md-option ng-value="hos" ng-repeat="hos in hospitals">{{hos.name}}</md-option>
         </md-select>
-        <aria-label>Qty (Lotsize: {{lotsize}}): </aria-label>
-        <!-- md-select ng-model="qty" aria-label="Qty:" ng-model-options="{qtyId: '$qty.id'}">
-           <md-option ng-value="qty" ng-repeat="qty in qtys">{{qty.id}}</md-option>
-        </md-select -->
+        <aria-label>Quantity (by number of beads):</aria-label>
         <div class="form-group">
-          <input class="form-control" type="number" ng-model="qty" placeholder="by bag (integer and/or fraction)">
+          <input class="form-control" type="number" ng-model="qty" placeholder="by number of beads">
         </div>
       </div>
 
       <md-dialog-actions>
         <md-button class="md-warn md-raised" ng-click="cancel()">Cancel</md-button>
-        <md-button class="md-primary md-raised" ng-click="ok(qty * lotsize, hospital.name);">OK</md-button>
+        <md-button class="md-primary md-raised" ng-click="ok(qty, hospital.name);">OK</md-button>
       </md-dialog-actions>
 
     </md-content>

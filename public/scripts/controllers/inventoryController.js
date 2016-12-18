@@ -22,14 +22,14 @@ myApp.controller('inventoryController',
     function getData() {
         var promise = $http.get('/dashboard/summary').then(function(response) {
             rawData = response.data;
-            var byasof = _.countBy(rawData, function(data) { return data.asof; });
             var dates = _.sortBy(_.keys(_.countBy(rawData, function(data) { return data.asof; }))).reverse();
-            var beads = _.uniq(_.map(rawData, function(data){ return {'name':data.name, 'lotsize':data.lotsize}; }), 'name');
+            var beads = _.uniq(_.map(rawData, function(data){ return {'name':data.name, 'name_jp':data.name_jp, 'lotsize':data.lotsize}; }), 'name');
 
             $scope.invs = [];
             for (var k = 0, len = beads.length; k < len; k++){
                 var inv = {};
                 inv["bead"] = beads[k].name;
+                inv["bead_jp"] = beads[k].name_jp;
                 inv["lotsize"] = beads[k].lotsize;
                 var total = 0;
                 var backorder_total = 0;

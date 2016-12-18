@@ -25,7 +25,8 @@ myApp.controller('orderHistoryController',
           rawData = response.data;
 
           var beads = $scope.beads;
-          var datesParties = _.uniq(_.map(rawData, function(data){ return {'asof':data.asof, 'party':data.party}; }), ('asof', 'party'));
+          //var datesParties = _.uniq(_.map(rawData, function(data){ return {'asof':data.asof, 'party':data.party}; }), ('asof', 'party'));
+          var datesParties = _.uniq(_.map(rawData, function(data){ return {'asof':data.asof, 'party':data.party}; }), function(asofparty) { return asofparty.asof + asofparty.party; });
 
           $scope.orders = [];
           for (var i = 0, len1 = datesParties.length; i < len1; i++){
