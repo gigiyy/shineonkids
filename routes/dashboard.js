@@ -11,12 +11,18 @@ var pgp = require('pg-promise')(options);
 
 router.get('/summary', function(req, res) {
     var results = [];
-    var sql = "SELECT to_char(i.asof, 'YYYY/MM/DD') asof, b.type, b.name, b.name_jp, b.lotsize, sum(case when i.party = 'Order' then 0 else i.qty end) qty, "
-            + "sum(case when i.party = 'Order' then i.qty when i.party = 'Receive' then -1 * i.qty else 0 end) backorder_qty "
+    var sql = "SELECT to_char(i.asof, 'YYYY/MM/DD') asof, b.type, b.name, b.name_jp, b.lotsize, SUM(CASE WHEN i.party = 'Order' THEN 0 ELSE i.qty END) qty, "
+            + "SUM(CASE WHEN i.party = 'Order' THEN i.qty WHEN i.party = 'Receive' THEN -1 * i.qty ELSE 0 END) backorder_qty "
             + "FROM inventory i RIGHT OUTER JOIN beads b "
             + "ON i.name = b.name "
             + "GROUP BY i.asof, i.name, b.type, b.name, b.name_jp, b.lotsize "
-            + "ORDER BY case when b.type = 'Color' then 1 when b.type = 'Special' then 2 when b.type = 'Alphabet' then 8 when b.type = 'Number' then 9 else 5 end, b.name, i.asof desc";
+            + "ORDER BY case WHEN b.type = 'Process' THEN 1 "
+            + "              WHEN b.type = 'Special' THEN 2 "
+            + "              WHEN b.type = 'Alphabet' THEN 7 "
+            + "              WHEN b.type = 'Number' THEN 8 "
+            + "              WHEN b.type = 'Discontinued' THEN 9 "
+            + "              ELSE 5 END, "
+            + "b.type, b.name, i.asof DESC";
 
     connection.result(sql)
         .then(function (data) {

@@ -30,15 +30,6 @@ router.post('/', function(req, res) {
           pgp.end();
           res.redirect('.');
       });
-
-  /*
-  if (user == "sokids" && password == "boc") {
-    req.session.user = user;
-    res.redirect('.');
-  } else {
-    res.redirect('.');
-  }
-  */
 });
 
 module.exports = router;
