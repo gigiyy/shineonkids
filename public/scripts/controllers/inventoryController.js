@@ -1,6 +1,6 @@
 myApp.controller('inventoryController',
-  ['$q', '$rootScope', '$scope', '$route', '$http', '$uibModal', '$log', '$mdDialog', '$cookies', 'LoginService',
-  function($q, $rootScope, $scope, $route, $http, $uibModal, $log, $mdDialog, $cookies, LoginService) {
+  ['$q', '$rootScope', '$scope', '$route', '$http', '$uibModal', '$log', '$mdDialog', '$cookies', 'LoginService', '$filter',
+  function($q, $rootScope, $scope, $route, $http, $uibModal, $log, $mdDialog, $cookies, LoginService, $filter) {
     $scope.adminEditState = true;
     $scope.invs = [];
     $scope.addition = 0;
@@ -76,12 +76,12 @@ myApp.controller('inventoryController',
         return promise;
     }
 
-    updateInventory = function(inv, qty, party){
+    updateInventory = function(inv, asof, qty, party){
         var name = inv.bead;
         var deferred = $q.defer();
 
         $http.post('/dashboard',
-            {name: name, qty: qty, party: party})
+            {asof: asof, name: name, qty: qty, party: party})
             .success(function (data, status) {
                 if(status === 200 ){
                     deferred.resolve();
@@ -103,9 +103,10 @@ myApp.controller('inventoryController',
         function dialogController($scope, $mdDialog, selectedBead, lotsize) {
             $scope.selectedBead = selectedBead;
             $scope.lotsize = lotsize;
+            $scope.asof = $filter('date')(new Date(), "yyyy/MM/dd");
 
-            $scope.ok = function(qty) {
-                updateInventory(inv, qty, "Order");
+            $scope.ok = function(asof, qty) {
+                updateInventory(inv, asof, qty, "Order");
                 $mdDialog.hide();
             }
 
@@ -145,12 +146,13 @@ myApp.controller('inventoryController',
         function dialogController($scope, $mdDialog, selectedBead, lotsize) {
             $scope.selectedBead = selectedBead;
             $scope.lotsize = lotsize;
+            $scope.asof = $filter('date')(new Date(), "yyyy/MM/dd");
 
-            $scope.ok = function(qty) {
+            $scope.ok = function(asof, qty) {
                 if (qty > abackorder_qty) {
                   alert('Add quantity should be <= Back order quantity');
                 } else {
-                  updateInventory(inv, qty, "Receive");
+                  updateInventory(inv, asof, qty, "Receive");
                   $mdDialog.hide();
                 }
             }
@@ -199,9 +201,10 @@ myApp.controller('inventoryController',
             $scope.hospitals = hospitals;
             $scope.selectedBead = selectedBead;
             $scope.lotsize = lotsize;
-            $scope.hospital = getSelected(selected, hospitals)
+            $scope.hospital = getSelected(selected, hospitals);
+            $scope.asof = $filter('date')(new Date(), "yyyy/MM/dd");
 
-            $scope.ok = function(qty, hospital) {
+            $scope.ok = function(asof, qty, hospital) {
                 if (!hospital) {
                   alert('Hospital should not be blank');
                 }
@@ -212,7 +215,7 @@ myApp.controller('inventoryController',
                     if (confirm(abead + ' is low on inventory, enter a Back Order?')) {
                         qty = -1* qty;
                         var party = '[Back Order]' + hospital;
-                        updateInventory(inv, qty, party);
+                        updateInventory(inv, asof, qty, party);
                         $mdDialog.hide();
                     }
                     else {
@@ -222,7 +225,7 @@ myApp.controller('inventoryController',
                 else {
                     qty = -1* qty;
                     $cookies.put('hospital', hospital);
-                    updateInventory(inv, qty, hospital);
+                    updateInventory(inv, asof, qty, hospital);
                     $mdDialog.hide();
                 }
             }

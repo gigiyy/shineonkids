@@ -58,14 +58,15 @@ router.post('/',  function(req, res) {
     var results = [];
     var sql = "INSERT INTO inventory (asof, name, qty, party) VALUES ($1, $2, $3, $4)";
     var newInventory = {
+        asof: req.body.asof,
         name: req.body.name,
         qty: req.body.qty,
         party: req.body.party
     };
 
-    var asof = moment().utc().add(+9, 'hours').format("YYYY/MM/DD");
+    //var asof = moment().utc().add(+9, 'hours').format("YYYY/MM/DD");
 
-    connection.result(sql, [asof, newInventory.name, newInventory.qty, newInventory.party])
+    connection.result(sql, [newInventory.asof, newInventory.name, newInventory.qty, newInventory.party])
         .then(function (data) {
         })
         .catch(function (error) {

@@ -24,7 +24,7 @@ myApp.controller('transactionHistoryController',
               var hospitals = response.data;
               $scope.parties = _.keys(_.countBy(hospitals, function(hospital) { return hospital.name; }));
 
-              for (var party of ['Add', 'Receive']) {
+              for (var party of ['Order', 'Receive']) {
                   $scope.parties.unshift(party);
               }
             });

@@ -4,11 +4,16 @@
     <md-content layout-padding layout="column" style="max-width:800px;max-height:810px;">
       <div id="mediumDiv">
 
-        <aria-label>Select Hospital:</aria-label>
+        <div class="form-group">
+          <label for="asof">Date (yyyy/mm/dd):</label>
+          <input class="form-control" type="text" ng-model="asof">
+        </div>
+
+        <label>Select Hospital:</label>
         <md-select ng-model="hospital" aria-label="Select Hospital:" >
            <md-option ng-value="hos" ng-repeat="hos in hospitals">{{hos.name}}</md-option>
         </md-select>
-        <aria-label>Quantity (by number of beads):</aria-label>
+        <label>Quantity (by number of beads):</label>
         <div class="form-group">
           <input class="form-control" type="number" ng-model="qty" placeholder="by number of beads">
         </div>
@@ -16,7 +21,7 @@
 
       <md-dialog-actions>
         <md-button class="md-warn md-raised" ng-click="cancel()">Cancel</md-button>
-        <md-button class="md-primary md-raised" ng-click="ok(qty, hospital.name);">OK</md-button>
+        <md-button class="md-primary md-raised" ng-click="ok(asof, qty, hospital.name);">OK</md-button>
       </md-dialog-actions>
 
     </md-content>
