@@ -6,8 +6,14 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                  <th class="col-md-1 col-sm-1 hidden-xs"></th>
-                  <th class="col-md-1 col-sm-1 hidden-xs"></th>
+                  <th colspan="2" class="hidden-xs">
+                    <md-input-container>
+                      <label>Bead Type</label>
+                      <md-select ng-model="selectedType">
+                        <md-option ng-value="type" ng-repeat="type in typesForFilter">{{type}}</md-option>
+                      </md-select>
+                  </md-input-container>
+                  </th>
                   <th class="col-md-1 col-sm-1 col-xs-1">Bead Type</th>
                   <th class="col-md-2 col-sm-2 col-xs-2">Bead Name</th>
                   <th class="col-md-2 col-sm-2 col-xs-2">Bead Name (JP)</th>
@@ -16,9 +22,9 @@
                   <th class="col-md-1 col-sm-1 hidden-xs">Price ($)</th>
                 </tr></tr>
             </thead>
-            <tbody ng-repeat="bead in beads">
+            <tbody ng-repeat="bead in beads | filter : typeFilter ">
                 <tr>
-                    <td class="hidden-xs"><button class="btn btn-primary" ng-click="editBeads($event, $index)">Edit</button></td>
+                    <td class="hidden-xs"><button class="btn btn-primary" ng-click="editBead($event, bead)">Edit</button></td>
                     <td class="hidden-xs"><img src="images/{{bead.name}}.jpg" width="60px" height="60px"></td>
                     <td>{{bead.type}}</td>
                     <td>{{bead.name}}</td>
@@ -29,7 +35,7 @@
                 </tr>
             </tbody>
         </table>
-        <button class="btn btn-warning" ng-click="newBead($event, $index)">New</button>
+        <button class="btn btn-warning" ng-click="newBead($event)">New</button>
     </div>
   </div>
 </div>

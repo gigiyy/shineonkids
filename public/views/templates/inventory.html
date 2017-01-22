@@ -1,15 +1,18 @@
 <div class="container-fluid">
-
     <div class="jumbotron">
       <div class="alt-table-responsive">
         <h3>Inventory</h3>
         <table class="table table-hover">
             <thead>
                 <tr>
-                  <th class="hidden-xs"></th>
-                  <th class="hidden-xs"></th>
-                  <th class="hidden-xs"></th>
-                  <th class="hidden-xs"></th>
+                  <th colspan="4" class="hidden-xs">
+                    <md-input-container>
+                      <label>Bead Type</label>
+                      <md-select ng-model="selectedType">
+                        <md-option ng-value="type" ng-repeat="type in typesForFilter">{{type}}</md-option>
+                      </md-select>
+                  </md-input-container>
+                  </th>
                   <th class="col-md-2 col-sm-3 col-xs-3">Bead Name</th>
                   <th class="col-md-2 col-sm-2 col-xs-2">Total# of Beads<br>(Back Order)</th>
                   <th ng-repeat="dt in dates" ng-show="$index >= 0 && $index < 3">{{dt.substring(5,10)}}</th>
@@ -17,11 +20,11 @@
                   <th ng-repeat="dt in dates" ng-show="$index >= 5 && $index < 8" class="hidden-sm hidden-xs">{{dt.substring(5,10)}}</th>
                 </tr>
             </thead>
-            <tbody ng-repeat="inv in invs">
+            <tbody ng-repeat="inv in invs | filter : typeFilter ">
                 <tr>
-                    <td class="hidden-xs"><button class="btn btn-danger btn-sm" ng-click="showPromptOrder($event, $index)">Order</button></td>
-                    <td class="hidden-xs"><button class="btn btn-primary btn-sm" ng-click="showPromptAdd($event, $index)">Add</button></td>
-                    <td class="hidden-xs"><button class="btn btn-warning btn-sm" ng-click="showPromptDeliver($event, $index)">Delv</button></td>
+                    <td class="hidden-xs"><button class="btn btn-danger btn-sm" ng-click="showPromptOrder($event, inv)">Order</button></td>
+                    <td class="hidden-xs"><button class="btn btn-primary btn-sm" ng-click="showPromptAdd($event, inv)">Add</button></td>
+                    <td class="hidden-xs"><button class="btn btn-warning btn-sm" ng-click="showPromptDeliver($event, inv)">Delv</button></td>
                     <td class="hidden-xs"><img src="images/{{inv.bead}}.jpg" width="50px" height="50px"></td>
                     <td class="col-md-2 col-sm-3 col-xs-3">{{inv.bead}}<br>{{inv.bead_jp}}</td>
                     <td class="col-md-2 col-sm-2 col-xs-2">{{inv.total}}<br>{{inv.backorder_total}}</td>

@@ -76,7 +76,6 @@ router.post('/',  function(req, res) {
 
     connection.result(sql, [newHospital.name, newHospital.postal, newHospital.address, newHospital.phone, newHospital.dept, newHospital.title, newHospital.contact1, newHospital.contact2, newHospital.email])
         .then(function (data) {
-
         })
         .catch(function (error) {
             console.log("ERROR/post:", error);

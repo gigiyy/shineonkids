@@ -1,11 +1,11 @@
 myApp.controller('inventoryController',
-  ['$q', '$window', '$scope', '$route', '$location', '$http', '$uibModal', '$log', '$mdDialog', '$cookies', 'LoginService',
-  function($q, $window, $scope, $route, $location, $http, $uibModal, $log, $mdDialog, $cookies, LoginService) {
+  ['$q', '$rootScope', '$scope', '$route', '$http', '$uibModal', '$log', '$mdDialog', '$cookies', 'LoginService',
+  function($q, $rootScope, $scope, $route, $http, $uibModal, $log, $mdDialog, $cookies, LoginService) {
     $scope.adminEditState = true;
-    $scope.invs = {};
-    $scope.keys = {};
+    $scope.invs = [];
     $scope.addition = 0;
-    $scope.hospitals = {};
+    $scope.hospitals = [];
+    $scope.typesForFilter = [];
 
     LoginService.loginCheck();
     getHospitals();
@@ -22,13 +22,33 @@ myApp.controller('inventoryController',
     function getData() {
         var promise = $http.get('/dashboard/summary').then(function(response) {
             rawData = response.data;
+
             var dates = _.sortBy(_.keys(_.countBy(rawData, function(data) { return data.asof; }))).reverse();
-            var beads = _.uniq(_.map(rawData, function(data){ return {'name':data.name, 'name_jp':data.name_jp, 'lotsize':data.lotsize}; }), 'name');
+            var beads = _.uniq(_.map(rawData, function(data){ return {'name':data.name, 'type':data.type, 'name_jp':data.name_jp, 'lotsize':data.lotsize}; }), 'name');
+
+            $scope.typesForFilter = _.keys(_.countBy(rawData, function(data) { return data.type; }));
+            $scope.typesForFilter.unshift("All");
+
+            $scope.$watch('selectedType', function(newValue) {
+              $rootScope.selectedType = newValue;
+            })
+
+            if (! $scope.selectedType && $rootScope.selectedType) {
+              $scope.selectedType = $rootScope.selectedType;
+            }
+            $scope.typeFilter = function(inv){
+              if (! $scope.selectedType || $scope.selectedType == "All" || $scope.selectedType == "") {
+                return true;
+              } else {
+                return inv.type === $scope.selectedType;
+              }
+            };
 
             $scope.invs = [];
             for (var k = 0, len = beads.length; k < len; k++){
                 var inv = {};
                 inv["bead"] = beads[k].name;
+                inv["type"] = beads[k].type;
                 inv["bead_jp"] = beads[k].name_jp;
                 inv["lotsize"] = beads[k].lotsize;
                 var total = 0;
@@ -56,10 +76,9 @@ myApp.controller('inventoryController',
         return promise;
     }
 
-    updateInventory = function(index, qty, party){
-        var name = $scope.invs[index].bead;
+    updateInventory = function(inv, qty, party){
+        var name = inv.bead;
         var deferred = $q.defer();
-        $scope.jobs = [];
 
         $http.post('/dashboard',
             {name: name, qty: qty, party: party})
@@ -72,19 +91,21 @@ myApp.controller('inventoryController',
             })
             .error(function (data) {
                 deferred.reject();
+            })
+            .finally(function () {
+              $route.reload();
             });
-        $window.location.reload();
+
         return deferred.promise;
     };
 
-    $scope.showPromptOrder = function(ev, index) {
-        function dialogController($scope, $mdDialog, index, selectedBead, lotsize) {
+    $scope.showPromptOrder = function(ev, inv) {
+        function dialogController($scope, $mdDialog, selectedBead, lotsize) {
             $scope.selectedBead = selectedBead;
             $scope.lotsize = lotsize;
-            $scope.index = index;
 
             $scope.ok = function(qty) {
-                updateInventory(index, qty, "Order");
+                updateInventory(inv, qty, "Order");
                 $mdDialog.hide();
             }
 
@@ -106,9 +127,8 @@ myApp.controller('inventoryController',
             parent: angular.element(document.body),
             preserveScope: true,
             locals: {
-                selectedBead: $scope.invs[index].bead,
-                lotsize: $scope.invs[index].lotsize,
-                index: index
+                selectedBead: inv.bead,
+                lotsize: inv.lotsize
             }
         });
 
@@ -118,20 +138,19 @@ myApp.controller('inventoryController',
     }
 
 
-    $scope.showPromptAdd = function(ev, index) {
-        var abackorder_qty = ($scope.invs[index].backorder_total == null) ? 0 : $scope.invs[index].backorder_total.replace(/\(/g,"").replace(/\)/g,"");
-        var abead = $scope.invs[index].bead;
+    $scope.showPromptAdd = function(ev, inv) {
+        var abackorder_qty = (inv.backorder_total == null) ? 0 : inv.backorder_total.replace(/\(/g,"").replace(/\)/g,"");
+        var abead = inv.bead;
 
-        function dialogController($scope, $mdDialog, index, selectedBead, lotsize) {
+        function dialogController($scope, $mdDialog, selectedBead, lotsize) {
             $scope.selectedBead = selectedBead;
             $scope.lotsize = lotsize;
-            $scope.index = index;
 
             $scope.ok = function(qty) {
                 if (qty > abackorder_qty) {
                   alert('Add quantity should be <= Back order quantity');
                 } else {
-                  updateInventory(index, qty, "Receive");
+                  updateInventory(inv, qty, "Receive");
                   $mdDialog.hide();
                 }
             }
@@ -154,9 +173,8 @@ myApp.controller('inventoryController',
             parent: angular.element(document.body),
             preserveScope: true,
             locals: {
-                selectedBead: $scope.invs[index].bead,
-                lotsize: $scope.invs[index].lotsize,
-                index: index
+                selectedBead: inv.bead,
+                lotsize: inv.lotsize
             }
         });
 
@@ -173,15 +191,14 @@ myApp.controller('inventoryController',
       }
     }
 
-    $scope.showPromptDeliver = function(ev, index) {
-        var aqty = $scope.invs[index].total;
-        var abead = $scope.invs[index].bead;
+    $scope.showPromptDeliver = function(ev, inv) {
+        var aqty = inv.total;
+        var abead = inv.bead;
 
-        function dialogController($scope, $mdDialog, selected, hospitals, selectedBead, lotsize, index) {
+        function dialogController($scope, $mdDialog, selected, hospitals, selectedBead, lotsize) {
             $scope.hospitals = hospitals;
             $scope.selectedBead = selectedBead;
             $scope.lotsize = lotsize;
-            $scope.index = index;
             $scope.hospital = getSelected(selected, hospitals)
 
             $scope.ok = function(qty, hospital) {
@@ -195,7 +212,7 @@ myApp.controller('inventoryController',
                     if (confirm(abead + ' is low on inventory, enter a Back Order?')) {
                         qty = -1* qty;
                         var party = '[Back Order]' + hospital;
-                        updateInventory(index, qty, party);
+                        updateInventory(inv, qty, party);
                         $mdDialog.hide();
                     }
                     else {
@@ -205,7 +222,7 @@ myApp.controller('inventoryController',
                 else {
                     qty = -1* qty;
                     $cookies.put('hospital', hospital);
-                    updateInventory(index, qty, hospital);
+                    updateInventory(inv, qty, hospital);
                     $mdDialog.hide();
                 }
             }
@@ -230,9 +247,8 @@ myApp.controller('inventoryController',
             locals: {
                 selected: $cookies.get('hospital'),
                 hospitals: $scope.hospitals,
-                selectedBead: $scope.invs[index].bead,
-                lotsize: $scope.invs[index].lotsize,
-                index: index
+                selectedBead: inv.bead,
+                lotsize: inv.lotsize
             }
         });
 

@@ -20,7 +20,7 @@
             </thead>
             <tbody ng-repeat="hospital in hospitals">
                 <tr>
-                    <td class="hidden-xs"><button class="btn btn-primary" ng-click="editHospitals($event, $index)">Edit</button></td>
+                    <td class="hidden-xs"><button class="btn btn-primary" ng-click="editHospital($event, hospital)">Edit</button></td>
                     <td>{{hospital.name}}</td>
                     <td>{{hospital.postal}}</td>
                     <td>{{hospital.address}}</td>
@@ -33,7 +33,7 @@
                 </tr>
             </tbody>
         </table>
-        <button class="btn btn-warning" ng-click="insertHospitals($event, $index)">New</button>
+        <button class="btn btn-warning" ng-click="insertHospital($event)">New</button>
     </div>
     </div>
 </div>

@@ -1,10 +1,11 @@
 myApp.controller('beadsController',
-    ['$q', '$scope', '$route', '$location', '$http', '$log', '$mdDialog', '$window', 'LoginService',
-    function($q, $scope, $route, $location, $http, $log, $mdDialog, $window, LoginService) {
+    ['$q', '$rootScope', '$scope', '$route', '$http', '$log', '$mdDialog', 'LoginService',
+    function($q, $rootScope, $scope, $route, $http, $log, $mdDialog, LoginService) {
         $scope.adminEditState = true;
-        $scope.beads = {};
-        $scope.names = {};
-        $scope.types = {};
+        $scope.beads = [];
+        $scope.names = [];
+        $scope.types = [];
+        $scope.typesForFilter = [];
 
         LoginService.loginCheck();
         getData();
@@ -14,6 +15,23 @@ myApp.controller('beadsController',
                 $scope.beads = response.data;
                 $scope.names = _.keys(_.countBy($scope.beads, function(data) { return data.name; }));
                 $scope.types = _.keys(_.countBy($scope.beads, function(data) { return data.type; }));
+                $scope.typesForFilter = _.keys(_.countBy($scope.beads, function(data) { return data.type; }));
+                $scope.typesForFilter.unshift("All");
+
+                $scope.$watch('selectedType', function(newValue) {
+                  $rootScope.selectedType = newValue;
+                })
+
+                if (! $scope.selectedType && $rootScope.selectedType) {
+                  $scope.selectedType = $rootScope.selectedType;
+                }
+                $scope.typeFilter = function(bead){
+                  if (! $scope.selectedType || $scope.selectedType == "All" || $scope.selectedType == "") {
+                    return true;
+                  } else {
+                    return bead.type === $scope.selectedType;
+                  }
+                };
             });
             return promise;
         }
@@ -32,8 +50,11 @@ myApp.controller('beadsController',
                 })
                 .error(function (data) {
                     deferred.reject();
+                })
+                .finally(function () {
+                  $route.reload();
                 });
-                $window.location.reload();
+
             return deferred.promise;
         };
 
@@ -51,8 +72,11 @@ myApp.controller('beadsController',
                  })
                  .error(function (data) {
                      deferred.reject();
+                 })
+                 .finally(function () {
+                   $route.reload();
                  });
-                 $window.location.reload();
+
              return deferred.promise;
          };
 
@@ -70,12 +94,15 @@ myApp.controller('beadsController',
                  })
                  .error(function (data) {
                      deferred.reject();
+                 })
+                 .finally(function () {
+                   $route.reload();
                  });
-             $window.location.reload();
+
              return deferred.promise;
          };
 
-        $scope.editBeads = function(ev, index) {
+        $scope.editBead = function(ev, bead) {
             function dialogController($scope, $mdDialog, types, name, type, lotsize, price, name_jp, description) {
                 $scope.types = types;
                 $scope.name = name;
@@ -84,7 +111,6 @@ myApp.controller('beadsController',
                 $scope.price = price;
                 $scope.name_jp = name_jp;
                 $scope.description = description;
-                $scope.index = index;
 
                 $scope.ok = function(type, lotsize, price, name_jp, description) {
                   if (!type) {
@@ -113,7 +139,7 @@ myApp.controller('beadsController',
                 targetEvent: ev,
                 ariaLabel:  'Edit Entry',
                 clickOutsideToClose: true,
-                templateUrl: 'views/templates/editBeads.html',
+                templateUrl: 'views/templates/editBead.html',
                 onComplete: afterShowAnimation,
                 size: 'large',
                 bindToController: true,
@@ -122,13 +148,12 @@ myApp.controller('beadsController',
                 preserveScope: true,
                 locals: {
                     types: $scope.types,
-                    name: $scope.beads[index].name,
-                    type: $scope.beads[index].type,
-                    lotsize: $scope.beads[index].lotsize,
-                    price: $scope.beads[index].price,
-                    name_jp: $scope.beads[index].name_jp,
-                    description: $scope.beads[index].description,
-                    index: index
+                    name: bead.name,
+                    type: bead.type,
+                    lotsize: bead.lotsize,
+                    price: bead.price,
+                    name_jp: bead.name_jp,
+                    description: bead.description
                 }
             });
 
@@ -137,7 +162,7 @@ myApp.controller('beadsController',
             }
         }
 
-        $scope.newBead = function(ev, index) {
+        $scope.newBead = function(ev) {
             function dialogController($scope, $mdDialog, names, types, name, type, lotsize, price, name_jp, description) {
                 $scope.names = names;
                 $scope.types = types;
@@ -147,7 +172,6 @@ myApp.controller('beadsController',
                 $scope.price = price;
                 $scope.name_jp = name_jp;
                 $scope.description = description;
-                $scope.index = index;
 
                 $scope.ok = function(name, type, lotsize, price, name_jp, description) {
                   if (!name) {
@@ -190,8 +214,7 @@ myApp.controller('beadsController',
                     lotsize: null,
                     price: null,
                     name_jp: "",
-                    description: "",
-                    index: index
+                    description: ""
                 }
             });
 

@@ -1,9 +1,9 @@
 myApp.controller('orderHistoryController',
-  ['$q', '$window', '$scope', '$route', '$location', '$http', '$uibModal', '$log', '$mdDialog', 'LoginService',
-  function($q, $window, $scope, $route, $location, $http, $uibModal, $log, $mdDialog, LoginService) {
+  ['$q', '$scope', '$route', '$http', '$uibModal', '$log', '$mdDialog', 'LoginService',
+  function($q, $scope, $route, $http, $uibModal, $log, $mdDialog, LoginService) {
     $scope.adminEditState = true;
-    $scope.beads = {};
-    $scope.orders = {};
+    $scope.beads = [];
+    $scope.orders = [];
 
     var rawData = null;
     LoginService.loginCheck();
@@ -25,7 +25,6 @@ myApp.controller('orderHistoryController',
           rawData = response.data;
 
           var beads = $scope.beads;
-          //var datesParties = _.uniq(_.map(rawData, function(data){ return {'asof':data.asof, 'party':data.party}; }), ('asof', 'party'));
           var datesParties = _.uniq(_.map(rawData, function(data){ return {'asof':data.asof, 'party':data.party}; }), function(asofparty) { return asofparty.asof + asofparty.party; });
 
           $scope.orders = [];

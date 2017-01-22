@@ -1,10 +1,10 @@
 myApp.controller('transactionHistoryController',
-  ['$q', '$window', '$scope', '$route', '$location', '$http', '$uibModal', '$log', '$mdDialog', 'LoginService',
-  function($q, $window, $scope, $route, $location, $http, $uibModal, $log, $mdDialog, LoginService) {
+  ['$q', '$scope', '$route', '$http', '$uibModal', '$log', '$mdDialog', 'LoginService',
+  function($q, $scope, $route, $http, $uibModal, $log, $mdDialog, LoginService) {
     $scope.adminEditState = true;
-    $scope.invs = {};
-    $scope.names = {};
-    $scope.parties = {};
+    $scope.invs = [];
+    $scope.names = [];
+    $scope.parties = [];
 
     LoginService.loginCheck();
     getBeads();
@@ -38,8 +38,8 @@ myApp.controller('transactionHistoryController',
         return promise;
     }
 
-    updateInventory = function(index, asof, name, party, qty){
-        var id = $scope.invs[index].id;
+    updateInventory = function(inv, asof, name, party, qty){
+        var id = inv.id;
         var deferred = $q.defer();
 
          $http.put('/dashboard',
@@ -53,13 +53,16 @@ myApp.controller('transactionHistoryController',
              })
              .error(function (data) {
                  deferred.reject();
+             })
+             .finally(function () {
+               $route.reload();
              });
-             $window.location.reload();
+
          return deferred.promise;
      };
 
-    deleteInventory = function(index){
-        var id = $scope.invs[index].id;
+    deleteInventory = function(inv){
+        var id = inv.id;
         var deferred = $q.defer();
 
         $http.put('/dashboard/delete', {id: id})
@@ -72,24 +75,26 @@ myApp.controller('transactionHistoryController',
             })
             .error(function (data) {
                 deferred.reject();
+            })
+            .finally(function () {
+              $route.reload();
             });
-        $window.location.reload();
+
         return deferred.promise;
     };
 
 
-    $scope.editInventory = function(ev, index) {
-        function dialogController($scope, $mdDialog, index, names, parties, asof, name, qty, party) {
+    $scope.editInventory = function(ev, inv) {
+        function dialogController($scope, $mdDialog, names, parties, asof, name, qty, party) {
             $scope.names = names;
             $scope.parties = parties;
             $scope.asof = asof;
             $scope.name = name;
             $scope.qty = qty;
             $scope.party = party;
-            $scope.index = index;
 
             $scope.ok = function(asof, name, party, qty) {
-                updateInventory(index, asof, name, party, qty);
+                updateInventory(inv, asof, name, party, qty);
                 $mdDialog.hide();
             }
 
@@ -99,7 +104,7 @@ myApp.controller('transactionHistoryController',
 
             $scope.delete = function() {
                 if (confirm('Is it ok to delete this inventory?')) {
-                  deleteInventory(index);
+                  deleteInventory(inv);
                   $mdDialog.hide();
                 }
             }
@@ -120,11 +125,10 @@ myApp.controller('transactionHistoryController',
             locals: {
                 names: $scope.names,
                 parties: $scope.parties,
-                asof: $scope.invs[index].asof,
-                name: $scope.invs[index].name,
-                qty: $scope.invs[index].qty,
-                party: $scope.invs[index].party,
-                index: index
+                asof: inv.asof,
+                name: inv.name,
+                qty: inv.qty,
+                party: inv.party
             }
         });
 

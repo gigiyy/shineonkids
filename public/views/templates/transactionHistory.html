@@ -14,7 +14,7 @@
             </thead>
             <tbody ng-repeat="inv in invs">
                 <tr>
-                    <td class="hidden-xs"><button class="btn btn-primary btn-sm" ng-click="editInventory($event, $index)">Edit</button></td>
+                    <td class="hidden-xs"><button class="btn btn-primary btn-sm" ng-click="editInventory($event, inv)">Edit</button></td>
                     <td>{{inv.asof}}</td>
                     <td>{{inv.name}}</td>
                     <td>{{inv.qty}}</td>

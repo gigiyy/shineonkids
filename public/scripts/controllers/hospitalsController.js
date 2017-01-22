@@ -1,9 +1,9 @@
 myApp.controller('hospitalsController',
-    ['$q', '$scope', '$route', '$location', '$http', '$log', '$mdDialog', '$window', 'LoginService',
-    function($q, $scope, $route, $location, $http, $log, $mdDialog, $window, LoginService) {
+    ['$q', '$scope', '$route', '$http', '$log', '$mdDialog', 'LoginService',
+    function($q, $scope, $route, $http, $log, $mdDialog, LoginService) {
         $scope.adminEditState = true;
-        $scope.hospitals = {};
-        $scope.names = {};
+        $scope.hospitals = [];
+        $scope.names = [];
 
         LoginService.loginCheck();
         getData();
@@ -30,8 +30,11 @@ myApp.controller('hospitalsController',
                 })
                 .error(function (data) {
                     deferred.reject();
+                })
+                .finally(function () {
+                  $route.reload();
                 });
-                $window.location.reload();
+
             return deferred.promise;
         };
 
@@ -49,8 +52,11 @@ myApp.controller('hospitalsController',
                 })
                 .error(function (data) {
                     deferred.reject();
+                })
+                .finally(function () {
+                  $route.reload();
                 });
-                $window.location.reload();
+
             return deferred.promise;
         };
 
@@ -68,12 +74,15 @@ myApp.controller('hospitalsController',
                 })
                 .error(function (data) {
                     deferred.reject();
+                })
+                .finally(function () {
+                  $route.reload();
                 });
-            $window.location.reload();
+
             return deferred.promise;
         };
 
-        $scope.editHospitals = function(ev, index) {
+        $scope.editHospital = function(ev, hospital) {
             function dialogController($scope, $mdDialog, name, postal, address, phone, dept, title, contact1, contact2, email) {
                 $scope.name = name;
                 $scope.postal = postal;
@@ -84,7 +93,6 @@ myApp.controller('hospitalsController',
                 $scope.contact1 = contact1;
                 $scope.contact2 = contact2;
                 $scope.email = email;
-                $scope.index = index;
 
                 $scope.ok = function(postal, address, phone, dept, title, contact1, contact2, email) {
                     updateHospital(name, postal, address, phone, dept, title, contact1, contact2, email);
@@ -108,7 +116,7 @@ myApp.controller('hospitalsController',
                 targetEvent: ev,
                 ariaLabel:  'Edit Entry',
                 clickOutsideToClose: true,
-                templateUrl: 'views/templates/editHospitals.html',
+                templateUrl: 'views/templates/editHospital.html',
                 onComplete: afterShowAnimation,
                 size: 'large',
                 bindToController: true,
@@ -116,16 +124,15 @@ myApp.controller('hospitalsController',
                 parent: angular.element(document.body),
                 preserveScope: true,
                 locals: {
-                    name: $scope.hospitals[index].name,
-                    postal: $scope.hospitals[index].postal,
-                    address: $scope.hospitals[index].address,
-                    phone: $scope.hospitals[index].phone,
-                    dept: $scope.hospitals[index].dept,
-                    title: $scope.hospitals[index].title,
-                    contact1: $scope.hospitals[index].contact1,
-                    contact2: $scope.hospitals[index].contact2,
-                    email: $scope.hospitals[index].email,
-                    index: index
+                    name: hospital.name,
+                    postal: hospital.postal,
+                    address: hospital.address,
+                    phone: hospital.phone,
+                    dept: hospital.dept,
+                    title: hospital.title,
+                    contact1: hospital.contact1,
+                    contact2: hospital.contact2,
+                    email: hospital.email
                 }
             });
 
@@ -134,7 +141,7 @@ myApp.controller('hospitalsController',
             }
         }
 
-        $scope.insertHospitals = function(ev, index) {
+        $scope.insertHospital = function(ev) {
             function dialogController($scope, $mdDialog, names, name, postal, address, phone, dept, title, contact1, contact2, email) {
                 $scope.names = names;
                 $scope.name = name;
@@ -146,7 +153,6 @@ myApp.controller('hospitalsController',
                 $scope.contact1 = contact1;
                 $scope.contact2 = contact2;
                 $scope.email = email;
-                $scope.index = index;
 
                 $scope.ok = function(name, postal, address, phone, dept, title, contact1, contact2, email) {
                   if (!name) {
@@ -188,8 +194,7 @@ myApp.controller('hospitalsController',
                     title: "",
                     contact1: "",
                     contact2: "",
-                    email: "",
-                    index: index
+                    email: ""
                 }
             });
 
