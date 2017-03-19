@@ -3,43 +3,43 @@ VALUES ('sokids', 'boc');
 
 
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES ('札幌医科大学附属病院', '060-8543', '札幌市中央区南1条西16丁目291番地', '011-611-2111（代）（内線 3422）', '小児科看護室', '看護副師長', '三上', '', 'kayok@sapmed.ac.jp');
+VALUES ('札幌医科大学附属病院', '060-8543', '札幌市中央区南1条西16丁目291番地', '','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES ('東京慈恵会医科大学附属病院','105-8471','東京都港区西新橋3-19-18','', '4E病棟','主任','佐藤三由紀','','');
+VALUES ('東京慈恵会医科大学附属病院','105-8471','東京都港区西新橋3-19-18','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES ('東京医科歯科大学医学部附属病院','113-8510','東京都文京区湯島１丁目5-45','03-3813-6111（代）',	 '小児科','CLS','村瀬　有紀子　','','');
+VALUES ('東京医科歯科大学医学部附属病院','113-8510','東京都文京区湯島１丁目5-45','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES('慶応義塾大学病院','160-0016','東京都新宿区信濃町35','', '5S病棟','師長','岡本　陽子','','');
+VALUES('慶応義塾大学病院','160-0016','東京都新宿区信濃町35','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES('東京都立小児総合医療センター','183-8561','東京都府中市武蔵台2-8-29','042-300-5111(代）', '子ども・家族支援部門　','心理','高嶋　裕子　','','');
+VALUES('東京都立小児総合医療センター','183-8561','東京都府中市武蔵台2-8-29','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES('神奈川県立こども医療センター','232-0066','横浜市南区六ツ川2-138-4','', '','ファシリティドッグハンドラー','森田優子','','');
+VALUES('神奈川県立こども医療センター','232-0066','横浜市南区六ツ川2-138-4','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES('千葉大学医学部附属病院','260-8677','千葉県千葉市中央区亥鼻 1-8-1','', 'みなみ棟3階  ','病棟保育士','山口、加藤','','');
+VALUES('千葉大学医学部附属病院','260-8677','千葉県千葉市中央区亥鼻 1-8-1','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES('成田赤十字病院','286-0041','成田市飯田町90-1','0476-22-2311 (代）',	 '小児科','医師','小泉　奈美','','');
+VALUES('成田赤十字病院','286-0041','成田市飯田町90-1','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES('茨城県立こども病院','311-4145','茨城県水戸市双葉台3-3-1','',	 '成育在宅支援室 ','CLS','松井　基子','','');
+VALUES('茨城県立こども病院','311-4145','茨城県水戸市双葉台3-3-1','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES('静岡県立こども病院','420-0953','静岡県静岡市葵区漆山860','', '北3病棟','師長','森田','','');
+VALUES('静岡県立こども病院','420-0953','静岡県静岡市葵区漆山860','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES('中京病院','457-0866','愛知県名古屋市南区三条１−１−１０','', '','レシピエント移植 コーディネーター','三浦　清世美','','');
+VALUES('中京病院','457-0866','愛知県名古屋市南区三条１−１−１０','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES('大阪市立総合医療センター','534-0021','大阪市都島区都島本通2丁目13番22号','（内線：山地さん6787）', '小児血液腫瘍科　','HPS','山地　理恵　','','');
+VALUES('大阪市立総合医療センター','534-0021','大阪市都島区都島本通2丁目13番22号','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES('大阪赤十字病院','543-8555','大阪市天王寺区筆ヶ崎町5-30','06-6774-5111',	 '小児科病棟','師長','杉田　智惠子','苑田','c.sugita@osaka-med.jrc.or.jp');
+VALUES('大阪赤十字病院','543-8555','大阪市天王寺区筆ヶ崎町5-30','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES('神戸大学医学部附属病院','650-0017','神戸市中央区楠町7-5-2','', '小児科 ','心理士','万代　ツルエ','','');
+VALUES('神戸大学医学部附属病院','650-0017','神戸市中央区楠町7-5-2','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES('チャイルド・ケモ・クリニック','650-0046','神戸市中央区港島中町8-5-3','', '','看護師','小島','','');
+VALUES('チャイルド・ケモ・クリニック','650-0046','神戸市中央区港島中町8-5-3','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES('兵庫県立こども病院','654-0081','兵庫県神戸市須磨区高倉台１-１-１','', '血液・腫瘍患者主体病棟','師長','宗和　里美','井戸','');
+VALUES('兵庫県立こども病院','654-0081','兵庫県神戸市須磨区高倉台１-１-１','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES('島根大学医学部附属病院','693-0021','島根県出雲市塩冶町89-1','0853(23)2111(代）', '小児センター','保育士','椿　敦美　','','');
+VALUES('島根大学医学部附属病院','693-0021','島根県出雲市塩冶町89-1','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES('高知医療センター','781-8555','高知県高知市池2125番地1','', 'すこやか4A（小児フロア）','看護科長','三浦由紀子','','');
+VALUES('高知医療センター','781-8555','高知県高知市池2125番地1','','','','','','');
 INSERT INTO hospitals (name, postal, address, phone, dept, title, contact1, contact2, email)
-VALUES('九州がんセンター','811-1395','福岡市南区野多目3-1-1','', 'サイコオンコロジー科','臨床心理士','白石　恵子','前原　葉子','');
+VALUES('九州がんセンター','811-1395','福岡市南区野多目3-1-1','','','','','','');
 
 
 INSERT INTO beads (name, type, lotsize, price, name_jp, description)

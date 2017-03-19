@@ -1,11 +1,11 @@
 myApp.controller('hospitalsController',
-    ['$q', '$scope', '$route', '$http', '$log', '$mdDialog', 'LoginService',
-    function($q, $scope, $route, $http, $log, $mdDialog, LoginService) {
+    ['$q', '$scope', '$route', '$http', '$log', '$mdDialog', 'Utility',
+    function($q, $scope, $route, $http, $log, $mdDialog, Utility) {
         $scope.adminEditState = true;
         $scope.hospitals = [];
         $scope.names = [];
 
-        LoginService.loginCheck();
+        Utility.loginCheck();
         getData();
 
         function getData() {

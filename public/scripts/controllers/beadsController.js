@@ -1,13 +1,13 @@
 myApp.controller('beadsController',
-    ['$q', '$rootScope', '$scope', '$route', '$http', '$log', '$mdDialog', 'LoginService',
-    function($q, $rootScope, $scope, $route, $http, $log, $mdDialog, LoginService) {
+    ['$q', '$rootScope', '$scope', '$route', '$http', '$log', '$mdDialog', 'Utility',
+    function($q, $rootScope, $scope, $route, $http, $log, $mdDialog, Utility) {
         $scope.adminEditState = true;
         $scope.beads = [];
         $scope.names = [];
         $scope.types = [];
         $scope.typesForFilter = [];
 
-        LoginService.loginCheck();
+        Utility.loginCheck();
         getData();
 
         function getData() {

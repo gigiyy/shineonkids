@@ -35,6 +35,9 @@ CREATE TABLE inventory
      timestamp timestamp NOT NULL default CURRENT_TIMESTAMP
      );
 
+ALTER TABLE inventory ADD COLUMN comment character varying(20);
+ALTER TABLE inventory ADD COLUMN linkid integer;
+
 CREATE TABLE users
      (
      username character varying(10) NOT NULL,

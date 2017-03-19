@@ -18,6 +18,17 @@ var cn = {
     //ssl: true
 };
 
+// Heroku setting
+//var cn = process.env.DATABASE_URL;
+//var cn = {
+//    host: 'ec2-54-235-78-240.compute-1.amazonaws.com',
+//    port: 5432,
+//    database: 'dffqran77u2g1q',
+//    user: 'hrhglalgpqgqdu',
+//    password: 'SZa96-2BMREH2IIyrX9GazYs_e',
+//    ssl: true
+//};
+
 var db = pgp(cn); // database instance;
 
 module.exports = db;

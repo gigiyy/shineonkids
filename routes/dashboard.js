@@ -11,8 +11,10 @@ var pgp = require('pg-promise')(options);
 
 router.get('/summary', function(req, res) {
     var results = [];
-    var sql = "SELECT to_char(i.asof, 'YYYY/MM/DD') asof, b.type, b.name, b.name_jp, b.lotsize, SUM(CASE WHEN i.party = 'Order' THEN 0 ELSE i.qty END) qty, "
-            + "SUM(CASE WHEN i.party = 'Order' THEN i.qty WHEN i.party = 'Receive' THEN -1 * i.qty ELSE 0 END) backorder_qty "
+    var sql = "SELECT to_char(i.asof, 'YYYY/MM/DD') asof, b.type, b.name, b.name_jp, b.lotsize, "
+            + "SUM(CASE WHEN i.party = 'Order' OR i.comment like 'B/O%' THEN 0 ELSE i.qty END) qty, "
+            + "SUM(CASE WHEN i.party = 'Order' THEN i.qty WHEN i.party = 'Receive' THEN -1 * i.qty ELSE 0 END) unreceived_qty, "
+            + "SUM(CASE WHEN i.comment like 'B/O%' THEN i.qty WHEN i.comment = 'Deliver for B/O' THEN -1 * i.qty ELSE 0 END) backorder_qty "
             + "FROM inventory i RIGHT OUTER JOIN beads b "
             + "ON i.name = b.name "
             + "GROUP BY i.asof, i.name, b.type, b.name, b.name_jp, b.lotsize "
@@ -39,7 +41,7 @@ router.get('/summary', function(req, res) {
 
 router.get('/details', function(req, res) {
     var results = [];
-    var sql = "SELECT id, to_char(asof, 'YYYY/MM/DD') asof, name, qty, party FROM inventory order by asof desc, timestamp desc, name asc";
+    var sql = "SELECT id, to_char(asof, 'YYYY/MM/DD') asof, name, qty, party, COALESCE(comment,'') AS comment FROM inventory order by asof desc, timestamp desc, name asc";
 
     connection.result(sql)
         .then(function (data) {
@@ -56,21 +58,23 @@ router.get('/details', function(req, res) {
 
 router.post('/',  function(req, res) {
     var results = [];
-    var sql = "INSERT INTO inventory (asof, name, qty, party) VALUES ($1, $2, $3, $4)";
+    var sql = "INSERT INTO inventory (asof, name, qty, party, comment, linkid) VALUES ($1, $2, $3, $4, $5, $6)";
     var newInventory = {
         asof: req.body.asof,
         name: req.body.name,
         qty: req.body.qty,
-        party: req.body.party
+        party: req.body.party,
+        comment: req.body.comment,
+        linkid: req.body.linkid
     };
 
     //var asof = moment().utc().add(+9, 'hours').format("YYYY/MM/DD");
 
-    connection.result(sql, [newInventory.asof, newInventory.name, newInventory.qty, newInventory.party])
+    connection.result(sql, [newInventory.asof, newInventory.name, newInventory.qty, newInventory.party, newInventory.comment, newInventory.linkid])
         .then(function (data) {
         })
         .catch(function (error) {
-            console.log("ERROR/post:", error);
+            console.log("ERROR/post:", error)
             res.send(false);
         })
         .finally(function () {
@@ -81,16 +85,17 @@ router.post('/',  function(req, res) {
 
 router.put('/',  function(req, res) {
     var results = [];
-    var sql = "UPDATE inventory SET asof = $1, name = $2, qty = $3, party = $4 WHERE id = $5";
+    var sql = "UPDATE inventory SET asof = $1, name = $2, qty = $3, party = $4, comment = $5 WHERE id = $6";
     var updInventory = {
         asof: req.body.asof,
         name: req.body.name,
         qty: req.body.qty,
         party: req.body.party,
+        comment: req.body.comment,
         id: req.body.id
     };
 
-    connection.result(sql, [updInventory.asof, updInventory.name, updInventory.qty, updInventory.party, updInventory.id])
+    connection.result(sql, [updInventory.asof, updInventory.name, updInventory.qty, updInventory.party, updInventory.comment, updInventory.id])
         .then(function (data) {
         })
         .catch(function (error) {
