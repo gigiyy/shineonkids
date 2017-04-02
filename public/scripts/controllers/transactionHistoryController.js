@@ -1,157 +1,178 @@
 myApp.controller('transactionHistoryController',
-  ['$q', '$scope', '$route', '$http', '$uibModal', '$log', '$mdDialog', 'Utility', '$filter',
-  function($q, $scope, $route, $http, $uibModal, $log, $mdDialog, Utility, $filter) {
-    $scope.adminEditState = true;
-    $scope.invs = [];
-    $scope.names = [];
-    $scope.parties = [];
+  ['$rootScope', '$scope', '$route', '$uibModal', '$log', '$mdDialog', '$filter', 'LoginService', 'DataService',
+  function($rootScope, $scope, $route, $uibModal, $log, $mdDialog, $filter, LoginService, DataService) {
 
-    Utility.loginCheck();
+    LoginService.loginCheck();
     getBeads();
     getParties();
-    getData();
+    getInventory();
 
     function getBeads() {
-        var promise = $http.get('/beads').then(function(response) {
-              var beads = response.data;
-              $scope.names = _.keys(_.countBy(beads, function(bead) { return bead.name; }));
-            });
-        return promise;
+      DataService.getBeads().then(function(data) {
+        $scope.names = _.uniq(_.map(data, function(bead) { return bead.name; }));
+      });
     }
 
     function getParties() {
-        var promise = $http.get('/hospitals').then(function(response) {
-              var hospitals = response.data;
-              $scope.parties = _.keys(_.countBy(hospitals, function(hospital) { return hospital.name; }));
+      DataService.getHospitals().then(function(data) {
+        var hospitals = _.uniq(_.map(data, function(hospital) { return hospital.name; }));
+        $scope.parties = DataService.getParties(hospitals.concat());
+        $scope.hospitalsForFilter = DataService.getHospitalsForFilter(hospitals.concat());
 
-              for (var party of ['Order', 'Receive']) {
-                  $scope.parties.unshift(party);
-              }
-            });
-        return promise;
+        $scope.$watch('selectedHospital', function(newValue) {
+          $rootScope.selectedHospital = newValue;
+        })
+
+        if (! $scope.selectedHospital && $rootScope.selectedHospital) {
+          $scope.selectedHospital = $rootScope.selectedHospital;
+        }
+
+        $scope.hospitalFilter = function(inv) {
+          return DataService.isFilteredByHospital($scope.selectedHospital, inv.party);
+        };
+      });
     }
 
-    function getData() {
-        var promise = $http.get('/dashboard/details').then(function(response) {
-                var rawData = response.data;
-                $scope.invs = _.map(rawData, function(data){
-                  data.showBracket = Utility.getBracketType(data.comment, data.party);
-                  data.showBackorder = (data.comment == 'B/O') ? true : false;
-                  return data;
-                })
-            });
-        return promise;
+    function getInventory() {
+      DataService.getInventoryDetails().then(function(data) {
+        var rawData = data;
+        $scope.invs = _.map(rawData, function(data) {
+          data.showBracket = DataService.getBracketType(data.comment, data.party);
+          data.showBackorder = (data.comment == 'B/O') ? true : false;
+          return data;
+        })
+
+        var comments = _.sortBy(_.uniq(_.map(rawData, function(data){ return data.comment; })));
+        $scope.commentsForFilter = _.filter(comments, function(comment){ return comment; });
+        $scope.commentsForFilter.unshift('All');
+
+        $scope.$watch('selectedComment', function(newValue) {
+          $rootScope.selectedComment = newValue;
+        })
+
+        if (! $scope.selectedComment && $rootScope.selectedComment) {
+          $scope.selectedComment = $rootScope.selectedComment;
+        }
+
+        $scope.commentFilter = function(inv) {
+          if (! $scope.selectedComment || $scope.selectedComment == 'All' || $scope.selectedComment == '') {
+            return true;
+          } else {
+            return inv.comment == $scope.selectedComment;
+          }
+        };
+      });
     }
 
     $scope.editInventory = function(ev, inv) {
-        function dialogController($scope, $mdDialog, names, parties, inv) {
-            $scope.names = names;
-            $scope.parties = parties;
-            $scope.asof = inv.asof;
-            $scope.name = inv.name;
-            $scope.qty = inv.qty;
-            $scope.party = inv.party;
-            $scope.comment = inv.comment;
+      function dialogController($scope, $mdDialog, names, parties, inv) {
+        $scope.names = names;
+        $scope.parties = parties;
+        $scope.asof = inv.asof;
+        $scope.name = inv.name;
+        $scope.qty = inv.qty;
+        $scope.party = inv.party;
+        $scope.comment = inv.comment;
 
-            $scope.ok = function(asof, name, qty, party, comment) {
-                Utility.updateInventory(inv, asof, name, qty, party, comment);
-                $mdDialog.hide();
-            }
-
-            $scope.cancel = function() {
-                $mdDialog.hide();
-            }
-
-            $scope.delete = function() {
-                if (confirm('Is it ok to delete this inventory?')) {
-                  Utility.deleteInventory(inv);
-                  $mdDialog.hide();
-                }
-            }
+        $scope.ok = function(asof, name, qty, party, comment) {
+          DataService.updateInventory(inv, asof, name, qty, party, comment);
+          $mdDialog.hide();
         }
 
-        $mdDialog.show({
-            controller: dialogController,
-            targetEvent: ev,
-            ariaLabel:  'Edit Inventory',
-            clickOutsideToClose: true,
-            templateUrl: 'views/templates/editInventory.html',
-            onComplete: afterShowAnimation,
-            size: 'large',
-            bindToController: true,
-            autoWrap: false,
-            parent: angular.element(document.body),
-            preserveScope: true,
-            locals: {
-                names: $scope.names,
-                parties: $scope.parties,
-                inv: inv
-            }
-        });
-
-        function afterShowAnimation(scope, element, options) {
-           // post-show code here: DOM element focus, etc.
+        $scope.cancel = function() {
+          $mdDialog.hide();
         }
+
+        $scope.delete = function() {
+          if (confirm('Is it ok to delete this inventory?')) {
+            DataService.deleteInventory(inv);
+            $mdDialog.hide();
+          }
+        }
+      }
+
+      $mdDialog.show({
+        controller: dialogController,
+        targetEvent: ev,
+        ariaLabel:  'Edit Inventory',
+        clickOutsideToClose: true,
+        templateUrl: 'views/templates/editInventory.html',
+        onComplete: afterShowAnimation,
+        size: 'large',
+        bindToController: true,
+        autoWrap: false,
+        parent: angular.element(document.body),
+        preserveScope: true,
+        locals: {
+          names: $scope.names,
+          parties: $scope.parties,
+          inv: inv
+        }
+      });
+
+      function afterShowAnimation(scope, element, options) {
+       // post-show code here: DOM element focus, etc.
+      }
     }
 
     $scope.deliverForBackorder = function(ev, inv) {
-        var orig_qty = -1 * inv.qty;
+      var orig_qty = -1 * inv.qty;
 
-        function dialogController($scope, $mdDialog, hospitals, inv) {
-            $scope.hospitals = hospitals;
-            $scope.selectedBead = inv.name;
-            $scope.hospital = inv.party;
-            $scope.qty = -1 * inv.qty;
-            $scope.lotsize = inv.lotsize;
-            $scope.showBracket = inv.showBracket;
-            $scope.showBackorder = inv.showBackorder;
-            $scope.asof = $filter('date')(new Date(), "yyyy/MM/dd");
+      function dialogController($scope, $mdDialog, hospitals, inv) {
+        $scope.hospitals = hospitals;
+        $scope.selectedBead = inv.name;
+        $scope.hospital = inv.party;
+        $scope.qty = -1 * inv.qty;
+        $scope.lotsize = inv.lotsize;
+        $scope.showBracket = inv.showBracket;
+        $scope.showBackorder = inv.showBackorder;
+        $scope.asof = $filter('date')(new Date(), "yyyy/MM/dd");
 
-            $scope.ok = function(asof, qty, hospital) {
-                if (qty < 0) {
-                    alert('Quantity should be > 0');
-                }
-                else if (qty > orig_qty) {
-                    alert('Delivery quantity should be <= backorder quantity');
-                }
-                else {
-                    if (qty < orig_qty) {
-                        var remaining_qty = -1 * (orig_qty - qty)
-                        Utility.insertInventory(inv, inv.asof, inv.name, remaining_qty, hospital, 'B/O');
-                    }
-                    qty = -1* qty;
-                    Utility.updateInventory(inv, inv.asof, inv.name, qty, hospital, 'B/O [Delivered]');
-                    Utility.insertInventory(inv, asof, inv.name, qty, hospital, 'Deliver for B/O', inv.id);
-                    $mdDialog.hide();
-                }
+        $scope.ok = function(asof, qty, hospital) {
+          if (qty < 0) {
+            alert('Quantity should be > 0');
+          }
+          else if (qty > orig_qty) {
+            alert('Delivery quantity should be <= backorder quantity');
+          }
+          else {
+            if (qty < orig_qty) {
+              var remaining_qty = -1 * (orig_qty - qty)
+              DataService.insertInventory(inv, inv.asof, inv.name, remaining_qty, hospital, 'B/O');
             }
-
-            $scope.cancel = function() {
-                $mdDialog.hide();
-            }
+            qty = -1* qty;
+            DataService.updateInventory(inv, inv.asof, inv.name, qty, hospital, 'B/O [Delivered]');
+            DataService.insertInventory(inv, asof, inv.name, qty, hospital, 'Deliver for B/O', inv.id);
+            $mdDialog.hide();
+          }
         }
 
-        $mdDialog.show({
-            controller: dialogController,
-            targetEvent: ev,
-            ariaLabel:  'Delivery for Backorder',
-            clickOutsideToClose: true,
-            templateUrl: 'views/templates/delvDialog.html',
-            onComplete: afterShowAnimation,
-            size: 'large',
-            bindToController: true,
-            autoWrap: false,
-            parent: angular.element(document.body),
-            preserveScope: true,
-            locals: {
-                hospitals: $scope.parties,
-                inv: inv
-            }
-        });
-
-        function afterShowAnimation(scope, element, options) {
-           // post-show code here: DOM element focus, etc.
+        $scope.cancel = function() {
+          $mdDialog.hide();
         }
+      }
+
+      $mdDialog.show({
+        controller: dialogController,
+        targetEvent: ev,
+        ariaLabel:  'Delivery for Backorder',
+        clickOutsideToClose: true,
+        templateUrl: 'views/templates/delvDialog.html',
+        onComplete: afterShowAnimation,
+        size: 'large',
+        bindToController: true,
+        autoWrap: false,
+        parent: angular.element(document.body),
+        preserveScope: true,
+        locals: {
+          hospitals: $scope.parties,
+          inv: inv
+        }
+      });
+
+      function afterShowAnimation(scope, element, options) {
+       // post-show code here: DOM element focus, etc.
+      }
     }
-
-}]);
+  }
+]);

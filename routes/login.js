@@ -16,20 +16,19 @@ router.post('/', function(req, res) {
   var user = req.body.user;
   var password = req.body.password;
 
-  connection.result("SELECT 1 FROM users WHERE username = $1 AND password = $2",
-  [user, password])
-      .then(function (data) {
-        if (data.rowCount == 1) {
-          req.session.user = user;
-        }
-      })
-      .catch(function (error) {
-          console.log("ERROR/post:", error);
-      })
-      .finally(function () {
-          pgp.end();
-          res.redirect('.');
-      });
+  connection.result("SELECT 1 FROM users WHERE username = $1 AND password = $2", [user, password])
+    .then(function (data) {
+      if (data.rowCount == 1) {
+        req.session.user = user;
+      }
+    })
+    .catch(function (error) {
+      console.log("ERROR/post:", error);
+    })
+    .finally(function () {
+      pgp.end();
+      res.redirect('.');
+    });
 });
 
 module.exports = router;

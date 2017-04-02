@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <title>Beads of Courage - Inventory</title>
 
     <link rel="icon" type="image/png" href="/images/eschool_favicon.png" />
@@ -34,14 +34,13 @@
     <script type="text/javascript" src="/scripts/controllers/beadsController.js"></script>
     <script type="text/javascript" src="/scripts/controllers/transactionHistoryController.js"></script>
     <script type="text/javascript" src="/scripts/controllers/orderHistoryController.js"></script>
-    <script type="text/javascript" src="/scripts/controllers/utility.js"></script>
 
-</head>
+    <script type="text/javascript" src="/scripts/models/dataService.js"></script>
+    <script type="text/javascript" src="/scripts/models/loginService.js"></script>
+  </head>
 
-<body ng-app="myApp">
-
-<div ng-include="'/templates/nav.html'"></div>
-<main ng-view></main>
-
-</body>
+  <body ng-app="myApp">
+    <div ng-include="'/templates/nav.html'"></div>
+    <main ng-view></main>
+  </body>
 </html>
